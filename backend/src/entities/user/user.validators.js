@@ -37,3 +37,9 @@ export const registerUserValidator = z.object({
     .min(3, { message: "Full name must be at least 3 characters long" })
     .max(20, { message: "Full name must be at most 20 characters long" }),
 });
+
+// zod validator to validate loginUser
+export const loginUserValidator = z.object({
+  email: emailValidator,
+  password: passwordValidator,
+});
