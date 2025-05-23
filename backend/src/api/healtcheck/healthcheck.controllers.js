@@ -1,5 +1,5 @@
 // import local modules
-import { APIResponse } from "../../utils/api/response.api.js";
+import { APIResponse } from "../response.api.js";
 
 // @controller GET /
 export const healthCheck = (_, res) => {

@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
 // import local modules
-import { healthCheckRouter, userRouter } from "./entities/index.js";
+import { healthCheckRouter, userRouter } from "./api/routers.api.js";
 
 //dotenv file config
 dotenv.config({ path: "./.env" });

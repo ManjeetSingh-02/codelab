@@ -1,8 +1,8 @@
 // import local modules
 import { asyncHandler } from "../../utils/async-handler.js";
 import { User } from "./user.models.js";
-import { APIError } from "../../utils/api/error.api.js";
-import { APIResponse } from "../../utils/api/response.api.js";
+import { APIError } from "../error.api.js";
+import { APIResponse } from "../response.api.js";
 import { sendMail } from "../../utils/mail/send.mail.js";
 import { verificationMailContentGenerator } from "../../utils/mail/genContent.mail.js";
 

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import Mailgen from "mailgen";
 
 // import local modules
-import { APIError } from "../api/error.api.js";
+import { APIError } from "../../api/error.api.js";
 
 //dotenv file config
 dotenv.config({ path: "./.env" });
