@@ -35,3 +35,21 @@ export const forgotPasswordMailContentGenerator = (username, resetPasswordToken)
     },
   };
 };
+
+// function to generate the content of password reset confirmation email
+export const passwordResetConfirmationMailContentGenerator = username => {
+  return {
+    body: {
+      name: username,
+      intro: "Your password has been successfully reset.",
+      action: {
+        instructions: "You can now log into your account with your new password.",
+        button: {
+          color: "#1a73e8",
+          text: "Log In",
+          link: `${process.env.ORIGIN_URL}/login`,
+        },
+      },
+    },
+  };
+};

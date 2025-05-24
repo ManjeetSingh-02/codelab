@@ -46,6 +46,6 @@ export async function sendMail({ email, subject, mailGenContent }) {
 
   // try to send email, if error occurs, throw an APIError
   await transporter.sendMail(mailOptions).catch(error => {
-    throw new APIError(400, "Something went wrong while sending email", error);
+    throw new APIError(500, "Something went wrong while sending email", error);
   });
 }

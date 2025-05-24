@@ -17,7 +17,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
 
   // check if user exists
   const loggedInUser = await User.findById(decodedToken?.id);
-  if (!loggedInUser) throw new APIError(400, "Security Error", "Invalid Access Token");
+  if (!loggedInUser) throw new APIError(401, "Security Error", "Invalid Access Token");
 
   // set user in request object
   req.user = {
