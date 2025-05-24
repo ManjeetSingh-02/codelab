@@ -1,16 +1,16 @@
 // import package modules
 import { z } from "zod";
 
-// zod validator to validate email
-export const emailValidator = z
+// zod schema for email
+const emailSchema = z
   .string()
-  .email({ message: "Invalid email address" })
   .trim()
   .toLowerCase()
-  .nonempty({ message: "Email is required" });
+  .nonempty({ message: "Email is required" })
+  .email({ message: "Invalid email address" });
 
-// zod validator to validate password
-export const passwordValidator = z
+// zod schema for password
+const passwordSchema = z
   .string()
   .nonempty({ message: "Password is required" })
   .min(8, { message: "Password must be at least 8 characters long" })
@@ -19,8 +19,8 @@ export const passwordValidator = z
   .regex(/[0-9]/, { message: "Password must contain at least one number" })
   .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" });
 
-// zod validator to validate registerUser
-export const registerUserValidator = z.object({
+// zod schema for registerUser
+export const registerUserSchema = z.object({
   username: z
     .string()
     .trim()
@@ -28,8 +28,8 @@ export const registerUserValidator = z.object({
     .nonempty({ message: "Username is required" })
     .min(3, { message: "Username must be at least 3 characters long" })
     .max(10, { message: "Username must be at most 10 characters long" }),
-  email: emailValidator,
-  password: passwordValidator,
+  email: emailSchema,
+  password: passwordSchema,
   fullname: z
     .string()
     .trim()
@@ -38,8 +38,18 @@ export const registerUserValidator = z.object({
     .max(20, { message: "Full name must be at most 20 characters long" }),
 });
 
-// zod validator to validate loginUser
-export const loginUserValidator = z.object({
-  email: emailValidator,
-  password: passwordValidator,
+// zod schema for loginUser
+export const loginUserSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
+});
+
+// zod schema for resend email verification and forgot password reset
+export const forgotPasswordandResendEmailSchema = z.object({
+  email: emailSchema,
+});
+
+// zod schema for reset forgotten password
+export const resetForgottenPasswordSchema = z.object({
+  newPassword: passwordSchema,
 });

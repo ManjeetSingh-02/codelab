@@ -1,5 +1,6 @@
 // import package modules
 import ms from "ms";
+import jwt from "jsonwebtoken";
 
 // import local modules
 import { asyncHandler } from "../../../utils/async-handler.js";
@@ -7,7 +8,11 @@ import { User } from "./user.models.js";
 import { APIError } from "../../error.api.js";
 import { APIResponse } from "../../response.api.js";
 import { sendMail } from "../../../utils/mail/send.mail.js";
-import { verificationMailContentGenerator } from "../../../utils/mail/genContent.mail.js";
+import {
+  forgotPasswordMailContentGenerator,
+  passwordResetConfirmationMailContentGenerator,
+  verificationMailContentGenerator,
+} from "../../../utils/mail/genContent.mail.js";
 
 // @controller POST /register
 export const registerUser = asyncHandler(async (req, res) => {
@@ -119,4 +124,135 @@ export const loginUser = asyncHandler(async (req, res) => {
       maxAge: ms(process.env.REFRESH_TOKEN_EXPIRY),
     })
     .json(new APIResponse(200, "Login Successful"));
+});
+
+// @controller POST /forgot-password
+export const forgotPasswordRequest = asyncHandler(async (req, res) => {
+  // get email from body
+  const { email } = req.body;
+
+  // get user with email
+  const existingUser = await User.findOne({ email });
+
+  // if user exist, proceed with password reset
+  if (existingUser) {
+    // generate new password reset token
+    const { token, tokenExpiry } = existingUser.generateTemporaryToken();
+
+    // store in db
+    existingUser.forgotPasswordToken = token;
+    existingUser.forgotPasswordExpiry = tokenExpiry;
+
+    // update user in db
+    await existingUser.save();
+
+    // send resetPasswordToken to user in email
+    await sendMail({
+      email: existingUser.email,
+      subject: "Reset Your Password - CodeLab",
+      mailGenContent: forgotPasswordMailContentGenerator(existingUser.username, token),
+    });
+  }
+
+  // success status to user
+  return res
+    .status(200)
+    .json(
+      new APIResponse(
+        200,
+        "If an account with this email exists, it will receive a password reset email shortly.",
+      ),
+    );
+});
+
+// @controller PATCH /reset-password/:resetPasswordToken
+export const resetForgottenPassword = asyncHandler(async (req, res) => {
+  // get resetPasswordToken from params
+  const { resetPasswordToken } = req.params;
+
+  // get new password
+  const { newPassword } = req.body;
+
+  // check if resetPasswordToken is valid
+  const existingUser = await User.findOne({ forgotPasswordToken: resetPasswordToken });
+  if (!existingUser) throw new APIError(400, "Reset Password Error", "Invalid token");
+
+  // check if resetPasswordToken is expired
+  const isTokenExpired = existingUser.forgotPasswordExpiry < Date.now();
+  if (isTokenExpired)
+    throw new APIError(410, "Reset Password Error", "Token expired, please request a new one");
+
+  // check if password is same as old password
+  const isSamePassword = await existingUser.isPasswordCorrect(newPassword);
+  if (isSamePassword)
+    throw new APIError(400, "Reset Password Error", "New password cannot be same as old password");
+
+  // update password
+  existingUser.password = newPassword;
+
+  // remove the token and its expiry
+  existingUser.forgotPasswordToken = undefined;
+  existingUser.forgotPasswordExpiry = undefined;
+
+  // update user in db
+  await existingUser.save();
+
+  // send password reset confirmation to user in email
+  await sendMail({
+    email: existingUser.email,
+    subject: "Password Reset Confirmation - CodeLab",
+    mailGenContent: passwordResetConfirmationMailContentGenerator(existingUser.username),
+  });
+
+  // success status to user
+  return res.status(200).json(new APIResponse(200, "Password reset successfully"));
+});
+
+// @controller PATCH /refresh-access-token
+export const refreshAccessToken = asyncHandler(async (req, res) => {
+  // get refresh token from cookies
+  const { refreshToken } = req.cookies;
+
+  // check if refresh token is present
+  if (!refreshToken) throw new APIError(401, "Authentication Error", "Unauthorized");
+
+  // decode refresh token
+  const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+  // check if user exists and refresh token matches
+  const existingUser = await User.findById(decodedToken.id);
+  if (!existingUser || existingUser.refreshToken !== refreshToken)
+    throw new APIError(403, "Authentication Error", "Invalid Refresh Token");
+
+  // generate new accessToken and accessToken
+  const newAccessToken = existingUser.generateAccessToken();
+  const newRefreshToken = existingUser.generateRefreshToken();
+
+  // store refresh token in db
+  existingUser.refreshToken = newRefreshToken;
+
+  // update user in db
+  await existingUser.save({ validateBeforeSave: false });
+
+  console.log(refreshToken);
+
+  // success status to user, save accessToken and refreshToken into cookies
+  return res
+    .status(200)
+    .cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: ms(process.env.ACCESS_TOKEN_EXPIRY),
+    })
+    .cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: ms(process.env.REFRESH_TOKEN_EXPIRY),
+    })
+    .json(
+      new APIResponse(200, "Access Token refreshed successfully", {
+        newAccessToken,
+        newRefreshToken,
+      }),
+    );
 });
