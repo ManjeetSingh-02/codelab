@@ -16,7 +16,7 @@ import {
   registerUserSchema,
   resetForgottenPasswordSchema,
 } from "./user.zodschemas.js";
-import { validateSchema } from "../../../utils/route-protector.js";
+import { isLoggedIn, validateSchema } from "../../../utils/route-protector.js";
 
 // create a new router
 const userRouter = Router();
@@ -50,6 +50,31 @@ userRouter.patch(
 
 // @route PATCH /refresh-access-token
 userRouter.patch("/refresh-access-token", refreshAccessToken);
+
+//                          --------------------------
+//                              PROTECTED ROUTES
+//                          --------------------------
+
+// @route POST /resend-verification-email
+userRouter.post("/resend-verification-email", isLoggedIn);
+
+// @route GET /profile
+userRouter.get("/profile", isLoggedIn);
+
+// @route PATCH /update-avatar
+userRouter.patch("/update-avatar", isLoggedIn);
+
+// @route PATCH /update-profile
+userRouter.patch("/update-profile", isLoggedIn);
+
+// @route PATCH /update-password
+userRouter.patch("/update-password", isLoggedIn);
+
+// @route DELETE /delete-account
+userRouter.delete("/delete-account", isLoggedIn);
+
+// @route POST /logout
+userRouter.post("/logout", isLoggedIn);
 
 // export router
 export { userRouter };
