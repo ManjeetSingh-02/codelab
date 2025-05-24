@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 // import local modules
 import { APIError } from "../api/error.api.js";
 import { asyncHandler } from "./async-handler.js";
-import { User } from "../api/user/user.models.js";
+import { User } from "../api/auth/user/user.models.js";
 
 // function to check for any validation errors
 export const isLoggedIn = asyncHandler(async (req, _, next) => {

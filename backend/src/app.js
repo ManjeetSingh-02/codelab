@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
 // import local modules
-import { healthCheckRouter, userRouter } from "./api/routers.api.js";
+import { authRouter, healthCheckRouter } from "./api/routers.api.js";
 
 //dotenv file config
 dotenv.config({ path: "./.env" });
@@ -38,7 +38,7 @@ app.use(express.static("public"));
 
 // middlewares for handling API routes
 app.use("/api/v1/healthcheck", healthCheckRouter);
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/auth", authRouter);
 
 // export app
 export default app;

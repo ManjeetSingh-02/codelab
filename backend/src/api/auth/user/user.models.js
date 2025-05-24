@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 // import local modules
-import { AvailableUserRoles, UserRolesEnum } from "../../utils/constants.js";
+import { AvailableUserRoles, UserRolesEnum } from "../../../utils/constants.js";
 
 // schema for user
 const userSchema = new Schema(
