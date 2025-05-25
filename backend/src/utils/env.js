@@ -20,6 +20,10 @@ export const envConfig = {
   MAIL_SERVICE_USERNAME: String(process.env.MAIL_SERVICE_USERNAME),
   MAIL_SERVICE_PASSWORD: String(process.env.MAIL_SERVICE_PASSWORD),
   MAIL_SERVICE_FROM: String(process.env.MAIL_SERVICE_FROM),
+  IMGHANDLER_CLOUD_NAME: String(process.env.IMGHANDLER_CLOUD_NAME),
+  IMGHANDLER_API_KEY: String(process.env.IMGHANDLER_API_KEY),
+  IMGHANDLER_API_SECRET: String(process.env.IMGHANDLER_API_SECRET),
+  IMGHANDLER_FOLDER_NAME: String(process.env.IMGHANDLER_FOLDER_NAME),
 };
 
 // zod schema for environment variables
@@ -47,6 +51,10 @@ export const envSchema = z.object({
   MAIL_SERVICE_FROM: z
     .string()
     .email({ message: "MAIL_SERVICE_FROM must be a valid email address" }),
+  IMGHANDLER_CLOUD_NAME: z.string(),
+  IMGHANDLER_API_KEY: z.string(),
+  IMGHANDLER_API_SECRET: z.string(),
+  IMGHANDLER_FOLDER_NAME: z.string(),
 });
 
 // function to validate environment variables
