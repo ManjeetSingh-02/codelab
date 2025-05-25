@@ -16,7 +16,7 @@ const userSchema = new Schema(
         url: {
           type: String,
           trim: true,
-          default: "https://placehold.co/600x400",
+          required: true,
         },
         mimeType: {
           type: String,
@@ -25,8 +25,12 @@ const userSchema = new Schema(
         },
         size: {
           type: Number,
-          default: 0,
+          required: true,
         },
+      },
+      default: {
+        url: "https://placehold.co/600x400",
+        size: 0,
       },
     },
     username: {
