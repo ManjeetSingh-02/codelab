@@ -3,6 +3,7 @@ import ms from "ms";
 import jwt from "jsonwebtoken";
 
 // import local modules
+import { envConfig } from "../../../utils/env.js";
 import { asyncHandler } from "../../../utils/async-handler.js";
 import { User } from "./user.models.js";
 import { APIError } from "../../error.api.js";
@@ -115,13 +116,13 @@ export const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: ms(process.env.ACCESS_TOKEN_EXPIRY),
+      secure:  envConfig.NODE_ENV === "production",
+      maxAge: ms( envConfig.ACCESS_TOKEN_EXPIRY),
     })
     .cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: ms(process.env.REFRESH_TOKEN_EXPIRY),
+      secure:  envConfig.NODE_ENV === "production",
+      maxAge: ms( envConfig.REFRESH_TOKEN_EXPIRY),
     })
     .json(new APIResponse(200, "Login Successful"));
 });
@@ -217,7 +218,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
   if (!refreshToken) throw new APIError(401, "Authentication Error", "Unauthorized");
 
   // decode refresh token
-  const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  const decodedToken = jwt.verify(refreshToken,  envConfig.REFRESH_TOKEN_SECRET);
 
   // check if user exists and refresh token matches
   const existingUser = await User.findById(decodedToken.id);
@@ -241,13 +242,13 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: ms(process.env.ACCESS_TOKEN_EXPIRY),
+      secure:  envConfig.NODE_ENV === "production",
+      maxAge: ms( envConfig.ACCESS_TOKEN_EXPIRY),
     })
     .cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: ms(process.env.REFRESH_TOKEN_EXPIRY),
+      secure:  envConfig.NODE_ENV === "production",
+      maxAge: ms( envConfig.REFRESH_TOKEN_EXPIRY),
     })
     .json(
       new APIResponse(200, "Access Token refreshed successfully", {

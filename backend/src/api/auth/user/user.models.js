@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 // import local modules
+import { envConfig } from "../../../utils/env.js";
 import { AvailableUserRoles, UserRolesEnum } from "../../../utils/constants.js";
 
 // schema for user
@@ -79,15 +80,15 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 
 // method to generateAccessToken
 userSchema.methods.generateAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+  return jwt.sign({ id: this._id },  envConfig.ACCESS_TOKEN_SECRET, {
+    expiresIn:  envConfig.ACCESS_TOKEN_EXPIRY,
   });
 };
 
 // method to generateRefreshToken
 userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+  return jwt.sign({ id: this._id },  envConfig.REFRESH_TOKEN_SECRET, {
+    expiresIn:  envConfig.REFRESH_TOKEN_EXPIRY,
   });
 };
 

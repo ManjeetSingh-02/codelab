@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 
 // import local modules
+import { envConfig } from "./env.js";
 import { APIError } from "../api/error.api.js";
 import { asyncHandler } from "./async-handler.js";
 import { User } from "../api/auth/user/user.models.js";
@@ -13,7 +14,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
   if (!accessToken) throw new APIError(401, "Security Error", "Unauthorized");
 
   // decode access token
-  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const decodedToken = jwt.verify(accessToken, envConfig.ACCESS_TOKEN_SECRET);
 
   // check if user exists
   const loggedInUser = await User.findById(decodedToken?.id);

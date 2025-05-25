@@ -1,13 +1,10 @@
 // import package modules
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
 import Mailgen from "mailgen";
 
 // import local modules
+import { envConfig } from "../env.js";
 import { APIError } from "../../api/error.api.js";
-
-//dotenv file config
-dotenv.config({ path: "./.env" });
 
 // function to send different types of emails
 export async function sendMail({ email, subject, mailGenContent }) {
@@ -16,7 +13,7 @@ export async function sendMail({ email, subject, mailGenContent }) {
     theme: "default",
     product: {
       name: "CodeLab",
-      link: process.env.ORIGIN_URL,
+      link: envConfig.ORIGIN_URL,
     },
   });
 
@@ -26,7 +23,7 @@ export async function sendMail({ email, subject, mailGenContent }) {
 
   // object to store email options
   const mailOptions = {
-    from: process.env.MAIL_SERVICE_FROM,
+    from: envConfig.MAIL_SERVICE_FROM,
     to: email,
     subject: subject,
     html: mail,
@@ -35,12 +32,12 @@ export async function sendMail({ email, subject, mailGenContent }) {
 
   // create a transporter for sending emails
   const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_SERVICE_HOST,
-    port: Number(process.env.MAIL_SERVICE_PORT),
-    secure: process.env.NODE_ENV === "production",
+    host: envConfig.MAIL_SERVICE_HOST,
+    port: Number(envConfig.MAIL_SERVICE_PORT),
+    secure: envConfig.NODE_ENV === "production",
     auth: {
-      user: process.env.MAIL_SERVICE_USERNAME,
-      pass: process.env.MAIL_SERVICE_PASSWORD,
+      user: envConfig.MAIL_SERVICE_USERNAME,
+      pass: envConfig.MAIL_SERVICE_PASSWORD,
     },
   });
 

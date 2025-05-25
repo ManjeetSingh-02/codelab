@@ -1,13 +1,15 @@
 // import package modules
 import mongoose from "mongoose";
 
+// import local modules
+import { envConfig } from "../env.js";
+
 // function to connect to the database
 export async function connectToDB() {
   await mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => console.log("Connected with DB"))
+    .connect(envConfig.MONGO_URI)
+    .then(() => console.log("Connection to DataBase: ✅"))
     .catch(error => {
-      console.log("Error connecting to DB", error);
-      process.exit(1);
+      throw new Error(`Connection to DataBase: ❌\n${error.message}`);
     });
 }

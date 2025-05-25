@@ -2,13 +2,10 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 
 // import local modules
+import { envConfig } from "./utils/env.js";
 import { authRouter, healthCheckRouter } from "./api/routers.api.js";
-
-//dotenv file config
-dotenv.config({ path: "./.env" });
 
 // create new express app
 const app = express();
@@ -19,7 +16,7 @@ app.use(cookieParser());
 // middleware for CORS configuration
 app.use(
   cors({
-    origin: process.env.ORIGIN_URL,
+    origin: envConfig.ORIGIN_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],

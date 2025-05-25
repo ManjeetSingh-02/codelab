@@ -1,3 +1,6 @@
+// import local modules
+import { envConfig } from "../env.js";
+
 // function to generate the content of the verification email
 export const verificationMailContentGenerator = (username, verificationToken) => {
   return {
@@ -9,7 +12,7 @@ export const verificationMailContentGenerator = (username, verificationToken) =>
         button: {
           color: "#1a73e8",
           text: "Verify your account",
-          link: `${process.env.ORIGIN_URL}/verify-account/${verificationToken}`,
+          link: `${envConfig.ORIGIN_URL}/verify-account/${verificationToken}`,
         },
       },
       outro: "This link is only valid for 5 mins.",
@@ -28,7 +31,7 @@ export const forgotPasswordMailContentGenerator = (username, resetPasswordToken)
         button: {
           color: "#0F9D58",
           text: "Reset your password",
-          link: `${process.env.ORIGIN_URL}/reset-password/${resetPasswordToken}`,
+          link: `${envConfig.ORIGIN_URL}/reset-password/${resetPasswordToken}`,
         },
       },
       outro: "This link is only valid for 5 mins.",
@@ -47,7 +50,7 @@ export const passwordResetConfirmationMailContentGenerator = username => {
         button: {
           color: "#1a73e8",
           text: "Log In",
-          link: `${process.env.ORIGIN_URL}/login`,
+          link: `${envConfig.ORIGIN_URL}/login`,
         },
       },
     },
