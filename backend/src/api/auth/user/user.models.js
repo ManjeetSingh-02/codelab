@@ -18,6 +18,11 @@ const userSchema = new Schema(
           trim: true,
           required: true,
         },
+        publicId: {
+          type: String,
+          trim: true,
+          required: true,
+        },
         mimeType: {
           type: String,
           enum: ["image/png", "image/jpeg", "image/jpg"],
@@ -30,6 +35,7 @@ const userSchema = new Schema(
       },
       default: {
         url: "https://placehold.co/600x400",
+        publicId: "default-avatar",
         size: 0,
       },
     },

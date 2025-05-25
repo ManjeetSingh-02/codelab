@@ -319,8 +319,8 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
     );
 
   // upload avatar to cloud storage
-  const avatarCloudUrl = await uploadImageonCloudinary(avatarLocalPath);
-  if (!avatarCloudUrl)
+  const avatarCloudImg = await uploadImageonCloudinary(avatarLocalPath);
+  if (!avatarCloudImg)
     throw new APIError(
       500,
       "Update Avatar Error",
@@ -330,10 +330,11 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
   // get user from db by its id
   const updateUser = await User.findById(req.user.id).select("avatar");
 
-  // update avatar cloud url, mime type and size
-  updateUser.avatar.url = avatarCloudUrl;
-  updateUser.avatar.mimeType = req.file.mimetype;
-  updateUser.avatar.size = req.file.size;
+  // update avatar cloud url, publicId, mimeType and size
+  updateUser.avatar.url = avatarCloudImg.secure_url;
+  updateUser.avatar.publicId = avatarCloudImg.public_id;
+  updateUser.avatar.mimeType = avatarCloudImg.resource_type + "/" + avatarCloudImg.format;
+  updateUser.avatar.size = avatarCloudImg.bytes;
 
   // update user in db
   await updateUser.save();

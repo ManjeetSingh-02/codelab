@@ -19,8 +19,8 @@ export const uploadImageonCloudinary = async localFilePath => {
       resource_type: "auto",
     });
 
-    // if successfull, return the secure URL of the uploaded image
-    return uploadResult.secure_url;
+    // if successfull, return the uploaded image
+    return uploadResult;
   } catch (error) {
     // if error, return null
     return null;
