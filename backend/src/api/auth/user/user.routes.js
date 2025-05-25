@@ -24,6 +24,7 @@ import {
   updateUserDetailsSchema,
 } from "./user.zodschemas.js";
 import { isLoggedIn, isVerified, validateSchema } from "../../../utils/route-protector.js";
+import { uploadImageLocally } from "../../../utils/imageHandler/multer.imageHandler.js";
 
 // create a new router
 const userRouter = Router();
@@ -69,7 +70,13 @@ userRouter.post("/resend-verification-email", isLoggedIn, resendVerificationEmai
 userRouter.get("/profile", isLoggedIn, isVerified, getLoggedInUserProfile);
 
 // @route PATCH /update-avatar
-userRouter.patch("/update-avatar", isLoggedIn, isVerified, updateUserAvatar);
+userRouter.patch(
+  "/update-avatar",
+  isLoggedIn,
+  isVerified,
+  uploadImageLocally.single("avatar"),
+  updateUserAvatar,
+);
 
 // @route PATCH /update-profile
 userRouter.patch(

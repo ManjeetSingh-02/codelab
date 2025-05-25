@@ -14,6 +14,7 @@ import {
   passwordChangeConfirmationMailContentGenerator,
   verificationMailContentGenerator,
 } from "../../../utils/mail/genContent.mail.js";
+import { uploadImageonCloudinary } from "../../../utils/imageHandler/cloudinary.imageHandler.js";
 
 // @controller POST /register
 export const registerUser = asyncHandler(async (req, res) => {
@@ -297,7 +298,7 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 export const getLoggedInUserProfile = asyncHandler(async (req, res) => {
   // get user from db by it's id
   const existingUser = await User.findById(req.user.id).select(
-    "_id username email fullname avatar.localPath avatar.url",
+    "_id username email fullname avatar",
   );
 
   // success status to user
@@ -307,7 +308,39 @@ export const getLoggedInUserProfile = asyncHandler(async (req, res) => {
 });
 
 // @controller PATCH /update-avatar
-export const updateUserAvatar = asyncHandler(async (req, res) => {});
+export const updateUserAvatar = asyncHandler(async (req, res) => {
+  // get avatar file local path
+  const avatarLocalPath = req.file.path;
+  if (!avatarLocalPath)
+    throw new APIError(
+      400,
+      "Update Avatar Error",
+      "Something went wrong while uploading avatar on local disk",
+    );
+
+  // upload avatar to cloud storage
+  const avatarCloudUrl = await uploadImageonCloudinary(avatarLocalPath);
+  if (!avatarCloudUrl)
+    throw new APIError(
+      500,
+      "Update Avatar Error",
+      "Something went wrong while uploading avatar to cloud",
+    );
+
+  // get user from db by its id
+  const updateUser = await User.findById(req.user.id).select("avatar");
+
+  // update avatar cloud url
+  updateUser.avatar = avatarCloudUrl;
+
+  // update user in db
+  await updateUser.save();
+
+  // success status to user
+  return res
+    .status(200)
+    .json(new APIResponse(200, "User avatar updated successfully", updateUser.avatar));
+});
 
 // @controller PATCH /update-profile
 export const updateUserDetails = asyncHandler(async (req, res) => {
