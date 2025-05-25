@@ -54,7 +54,9 @@ export const validateSchema = zodSchema =>
       throw new APIError(
         400,
         "Validation Error",
-        validationResult.error.issues.map(issue => `${issue.path.join(", ")} ${issue.message}`),
+        validationResult.error.issues.map(
+          issue => `${issue.path.join(", ") || "All fields"} ${issue.message}`,
+        ),
       );
 
     // forward request to next middleware
