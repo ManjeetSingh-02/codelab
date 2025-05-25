@@ -330,8 +330,10 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
   // get user from db by its id
   const updateUser = await User.findById(req.user.id).select("avatar");
 
-  // update avatar cloud url
-  updateUser.avatar = avatarCloudUrl;
+  // update avatar cloud url, mime type and size
+  updateUser.avatar.url = avatarCloudUrl;
+  updateUser.avatar.mimeType = req.file.mimetype;
+  updateUser.avatar.size = req.file.size;
 
   // update user in db
   await updateUser.save();

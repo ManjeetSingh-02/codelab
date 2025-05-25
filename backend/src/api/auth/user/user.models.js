@@ -12,8 +12,22 @@ import { AvailableUserRoles, UserRolesEnum } from "../../../utils/constants.js";
 const userSchema = new Schema(
   {
     avatar: {
-      type: String,
-      default: "https://placehold.co/600x400",
+      type: {
+        url: {
+          type: String,
+          trim: true,
+          default: "https://placehold.co/600x400",
+        },
+        mimeType: {
+          type: String,
+          enum: ["image/png", "image/jpeg", "image/jpg"],
+          default: "image/png",
+        },
+        size: {
+          type: Number,
+          default: 0,
+        },
+      },
     },
     username: {
       type: String,

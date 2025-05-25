@@ -11,10 +11,21 @@ const storage = multer.diskStorage({
   },
 });
 
+// file filter to allow only png/jpeg file types
+const fileFilter = (_, file, cb) => {
+  // allowed mime types
+  const allowedMimeTypes = ["image/jpeg", "image/png"];
+
+  // check if the file type is allowed
+  if (allowedMimeTypes.includes(file.mimetype)) cb(null, true);
+  else cb(new Error("Only JPG and PNG files are allowed!"), false);
+};
+
 // middleware for file upload
 export const uploadImageLocally = multer({
   storage: storage,
   limits: {
     fieldSize: 1024 * 1024 * 1,
   },
+  fileFilter: fileFilter,
 });
