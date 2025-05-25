@@ -7,11 +7,12 @@ import {
   loginUser,
   refreshAccessToken,
   registerUser,
+  resendVerificationEmail,
   resetForgottenPassword,
   verifyAccount,
 } from "./user.controllers.js";
 import {
-  forgotPasswordandResendEmailSchema,
+  forgotPasswordEmailSchema,
   loginUserSchema,
   registerUserSchema,
   resetForgottenPasswordSchema,
@@ -37,7 +38,7 @@ userRouter.post("/login", validateSchema(loginUserSchema), loginUser);
 // @route POST /forgot-password
 userRouter.post(
   "/forgot-password",
-  validateSchema(forgotPasswordandResendEmailSchema),
+  validateSchema(forgotPasswordEmailSchema),
   forgotPasswordRequest,
 );
 
@@ -56,7 +57,7 @@ userRouter.patch("/refresh-access-token", refreshAccessToken);
 //                          --------------------------
 
 // @route POST /resend-verification-email
-userRouter.post("/resend-verification-email", isLoggedIn);
+userRouter.post("/resend-verification-email", isLoggedIn, resendVerificationEmail);
 
 // @route GET /profile
 userRouter.get("/profile", isLoggedIn);

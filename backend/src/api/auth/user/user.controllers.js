@@ -98,9 +98,6 @@ export const loginUser = asyncHandler(async (req, res) => {
   if (!existingUser || !(await existingUser.isPasswordCorrect(password)))
     throw new APIError(401, "Login Error", "Invalid credentials");
 
-  // check if user is verified
-  if (!existingUser.isEmailVerified) throw new APIError(403, "Login Error", "Email not verified");
-
   // generate access & refresh token
   const accessToken = existingUser.generateAccessToken();
   const refreshToken = existingUser.generateRefreshToken();
@@ -111,20 +108,26 @@ export const loginUser = asyncHandler(async (req, res) => {
   // update user in db
   await existingUser.save({ validateBeforeSave: false });
 
-  // success status to user, save accessToken and refreshToken into cookies
+  // success status to user, save accessToken and refreshToken into cookies and send emailVerification status
   return res
     .status(200)
     .cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure:  envConfig.NODE_ENV === "production",
-      maxAge: ms( envConfig.ACCESS_TOKEN_EXPIRY),
+      secure: envConfig.NODE_ENV === "production",
+      sameSite: "None",
+      maxAge: ms(envConfig.ACCESS_TOKEN_EXPIRY),
     })
     .cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure:  envConfig.NODE_ENV === "production",
-      maxAge: ms( envConfig.REFRESH_TOKEN_EXPIRY),
+      secure: envConfig.NODE_ENV === "production",
+      sameSite: "None",
+      maxAge: ms(envConfig.REFRESH_TOKEN_EXPIRY),
     })
-    .json(new APIResponse(200, "Login Successful"));
+    .json(
+      new APIResponse(200, "Login Successful", {
+        isEmailVerified: existingUser.isEmailVerified,
+      }),
+    );
 });
 
 // @controller POST /forgot-password
@@ -218,7 +221,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
   if (!refreshToken) throw new APIError(401, "Authentication Error", "Unauthorized");
 
   // decode refresh token
-  const decodedToken = jwt.verify(refreshToken,  envConfig.REFRESH_TOKEN_SECRET);
+  const decodedToken = jwt.verify(refreshToken, envConfig.REFRESH_TOKEN_SECRET);
 
   // check if user exists and refresh token matches
   const existingUser = await User.findById(decodedToken.id);
@@ -242,13 +245,15 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure:  envConfig.NODE_ENV === "production",
-      maxAge: ms( envConfig.ACCESS_TOKEN_EXPIRY),
+      secure: envConfig.NODE_ENV === "production",
+      sameSite: "None",
+      maxAge: ms(envConfig.ACCESS_TOKEN_EXPIRY),
     })
     .cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure:  envConfig.NODE_ENV === "production",
-      maxAge: ms( envConfig.REFRESH_TOKEN_EXPIRY),
+      secure: envConfig.NODE_ENV === "production",
+      sameSite: "None",
+      maxAge: ms(envConfig.REFRESH_TOKEN_EXPIRY),
     })
     .json(
       new APIResponse(200, "Access Token refreshed successfully", {
@@ -256,4 +261,34 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         newRefreshToken,
       }),
     );
+});
+
+// @controller POST /resend-verification-email
+export const resendVerificationEmail = asyncHandler(async (req, res) => {
+  // get user with req.user.id
+  const existingUser = await User.findById(req.user.id);
+
+  // check if user is already verified
+  if (existingUser.isEmailVerified)
+    throw new APIError(409, "Verification Error", "User already verified");
+
+  // generate new emailVerificationToken and expiry
+  const { token, tokenExpiry } = existingUser.generateTemporaryToken();
+
+  // store in db
+  existingUser.emailVerificationToken = token;
+  existingUser.emailVerificationExpiry = tokenExpiry;
+
+  // update user in db
+  await existingUser.save();
+
+  // send emailVerificationToken to user by email
+  await sendMail({
+    email: existingUser.email,
+    subject: "Verify your account - CodeLab",
+    mailGenContent: verificationMailContentGenerator(existingUser.username, token),
+  });
+
+  // success status to user
+  return res.status(200).json(new APIResponse(200, "Verification email sent successfully"));
 });

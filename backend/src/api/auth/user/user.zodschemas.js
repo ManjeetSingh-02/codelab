@@ -44,8 +44,8 @@ export const loginUserSchema = z.object({
   password: passwordSchema,
 });
 
-// zod schema for resend email verification and forgot password reset
-export const forgotPasswordandResendEmailSchema = z.object({
+// zod schema for forgot password reset
+export const forgotPasswordEmailSchema = z.object({
   email: emailSchema,
 });
 
