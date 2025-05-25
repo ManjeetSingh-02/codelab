@@ -31,7 +31,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
 });
 
 // function to check if user is verified
-export const isVerified = asyncHandler(async (req, _, res) => {
+export const isVerified = asyncHandler(async (req, _, next) => {
   // get user from db by it's id
   const existingUser = await User.findById(req.user.id);
 
