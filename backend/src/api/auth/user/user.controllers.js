@@ -10,11 +10,15 @@ import { APIError } from "../../error.api.js";
 import { APIResponse } from "../../response.api.js";
 import { sendMail } from "../../../utils/mail/send.mail.js";
 import {
+  accountDeletionConfirmationMailContentGenerator,
   forgotPasswordMailContentGenerator,
   passwordChangeConfirmationMailContentGenerator,
   verificationMailContentGenerator,
 } from "../../../utils/mail/genContent.mail.js";
-import { uploadImageonCloudinary } from "../../../utils/imageHandler/cloudinary.imageHandler.js";
+import {
+  deleteImageFromCloudinary,
+  uploadImageonCloudinary,
+} from "../../../utils/imageHandler/cloudinary.imageHandler.js";
 
 // @controller POST /register
 export const registerUser = asyncHandler(async (req, res) => {
@@ -421,4 +425,50 @@ export const updateUserCurrentPassword = asyncHandler(async (req, res) => {
 
   // success status to user
   return res.status(200).json(new APIResponse(200, "Password updated successfully"));
+});
+
+// @controller DELETE /delete-account
+export const deleteUser = asyncHandler(async (req, res) => {
+  // get user from db by its id
+  const existingUser = await User.findById(req.user.id);
+
+  // delete user avatar from cloud storage if exists
+  if (existingUser.avatar.size) {
+    // delete avatar from cloud storage
+    const isAvatarDeleted = await deleteImageFromCloudinary(existingUser.avatar.publicId);
+    if (!isAvatarDeleted)
+      throw new APIError(500, "Delete Account Error", "Something went wrong while deleting avatar");
+  }
+
+  // delete user from db
+  await existingUser.deleteOne();
+
+  // send account deletion confirmation to user in email
+  await sendMail({
+    email: existingUser.email,
+    subject: "Account Deletion Confirmation - CodeLab",
+    mailGenContent: accountDeletionConfirmationMailContentGenerator(existingUser.username),
+  });
+
+  // success status to user
+  return res.status(200).json(new APIResponse(200, "User account deleted successfully"));
+});
+
+// @controller POST /logout
+export const logoutUser = asyncHandler(async (req, res) => {
+  // get user from db
+  const existingUser = await User.findById(req.user.id);
+
+  // remove refresh token from db
+  existingUser.refreshToken = undefined;
+
+  // update user in db
+  await existingUser.save();
+
+  // success status to user, clear cookies
+  return res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json(new APIResponse(200, "Logout Successful"));
 });

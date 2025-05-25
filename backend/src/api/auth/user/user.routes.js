@@ -3,9 +3,11 @@ import { Router } from "express";
 
 // import local modules
 import {
+  deleteUser,
   forgotPasswordRequest,
   getLoggedInUserProfile,
   loginUser,
+  logoutUser,
   refreshAccessToken,
   registerUser,
   resendVerificationEmail,
@@ -97,10 +99,10 @@ userRouter.patch(
 );
 
 // @route DELETE /delete-account
-userRouter.delete("/delete-account", isLoggedIn);
+userRouter.delete("/delete-account", isLoggedIn, isVerified, deleteUser);
 
 // @route POST /logout
-userRouter.post("/logout", isLoggedIn);
+userRouter.post("/logout", isLoggedIn, logoutUser);
 
 // export router
 export { userRouter };

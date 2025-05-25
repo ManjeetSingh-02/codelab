@@ -56,3 +56,21 @@ export const passwordChangeConfirmationMailContentGenerator = username => {
     },
   };
 };
+
+// function to generate the content of account deletion confirmation email
+export const accountDeletionConfirmationMailContentGenerator = username => {
+  return {
+    body: {
+      name: username,
+      intro: "Your account has been successfully deleted.",
+      action: {
+        instructions: "If you have any questions, feel free to contact us.",
+        button: {
+          color: "#D93025",
+          text: "Contact Support",
+          link: `${envConfig.ORIGIN_URL}/support`,
+        },
+      },
+    },
+  };
+};
