@@ -11,7 +11,7 @@ import { APIResponse } from "../../response.api.js";
 import { sendMail } from "../../../utils/mail/send.mail.js";
 import {
   forgotPasswordMailContentGenerator,
-  passwordResetConfirmationMailContentGenerator,
+  passwordChangeConfirmationMailContentGenerator,
   verificationMailContentGenerator,
 } from "../../../utils/mail/genContent.mail.js";
 
@@ -201,11 +201,11 @@ export const resetForgottenPassword = asyncHandler(async (req, res) => {
   // update user in db
   await existingUser.save();
 
-  // send password reset confirmation to user in email
+  // send password change confirmation to user in email
   await sendMail({
     email: existingUser.email,
-    subject: "Password Reset Confirmation - CodeLab",
-    mailGenContent: passwordResetConfirmationMailContentGenerator(existingUser.username),
+    subject: "Password Change Confirmation - CodeLab",
+    mailGenContent: passwordChangeConfirmationMailContentGenerator(existingUser.username),
   });
 
   // success status to user
@@ -291,4 +291,98 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 
   // success status to user
   return res.status(200).json(new APIResponse(200, "Verification email sent successfully"));
+});
+
+// @controller GET /profile
+export const getLoggedInUserProfile = asyncHandler(async (req, res) => {
+  // get user from db by it's id
+  const existingUser = await User.findById(req.user.id).select(
+    "_id username email fullname avatar.localPath avatar.url",
+  );
+
+  // success status to user
+  return res
+    .status(200)
+    .json(new APIResponse(200, "User details fetched successfully", existingUser));
+});
+
+// @controller PATCH /update-avatar
+export const updateUserAvatar = asyncHandler(async (req, res) => {});
+
+// @controller PATCH /update-profile
+export const updateUserDetails = asyncHandler(async (req, res) => {
+  // get data from body
+  const { username, fullname } = req.body;
+
+  // check if user exists with same username
+  const existingUser = await User.findOne({
+    username,
+    _id: { $ne: req.user.id },
+  });
+  if (existingUser)
+    throw new APIError(
+      409,
+      "Update Profile Error",
+      "Another user already exists with this username",
+    );
+
+  // get user from db by its id
+  const updateUser = await User.findById(req.user.id).select("username fullname");
+
+  // check if user has provided same username and fullname
+  if (updateUser.username === username && updateUser.fullname === fullname)
+    throw new APIError(
+      400,
+      "Update Profile Error",
+      "New username and fullname can't be same as old username and fullname",
+    );
+
+  // update username conditionally
+  if (updateUser.username !== username) updateUser.username = username;
+
+  // update fullname conditionally
+  if (updateUser.fullname !== fullname) updateUser.fullname = fullname;
+
+  // update user in db
+  await updateUser.save();
+
+  // success status to user
+  return res
+    .status(200)
+    .json(new APIResponse(200, "User details updated successfully", updateUser));
+});
+
+// @controller PATCH /update-password
+export const updateUserCurrentPassword = asyncHandler(async (req, res) => {
+  // get currentPassword and newPassword
+  const { currentPassword, newPassword } = req.body;
+
+  // get user from db by its id
+  const existingUser = await User.findById(req.user.id);
+
+  // check if old password is correct
+  const isOldPasswordCorrect = await existingUser.isPasswordCorrect(currentPassword);
+  if (!isOldPasswordCorrect)
+    throw new APIError(400, "Change Password Error", "Old password is incorrect");
+
+  // check if new password is same as old password
+  const isSamePassword = await existingUser.isPasswordCorrect(newPassword);
+  if (isSamePassword)
+    throw new APIError(400, "Change Password Error", "New password cannot be same as old password");
+
+  // update password
+  existingUser.password = newPassword;
+
+  // update user in db
+  await existingUser.save();
+
+  // send password change confirmation to user in email
+  await sendMail({
+    email: existingUser.email,
+    subject: "Password Change Confirmation - CodeLab",
+    mailGenContent: passwordChangeConfirmationMailContentGenerator(existingUser.username),
+  });
+
+  // success status to user
+  return res.status(200).json(new APIResponse(200, "Password updated successfully"));
 });

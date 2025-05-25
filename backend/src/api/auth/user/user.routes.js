@@ -4,11 +4,15 @@ import { Router } from "express";
 // import local modules
 import {
   forgotPasswordRequest,
+  getLoggedInUserProfile,
   loginUser,
   refreshAccessToken,
   registerUser,
   resendVerificationEmail,
   resetForgottenPassword,
+  updateUserAvatar,
+  updateUserCurrentPassword,
+  updateUserDetails,
   verifyAccount,
 } from "./user.controllers.js";
 import {
@@ -16,8 +20,10 @@ import {
   loginUserSchema,
   registerUserSchema,
   resetForgottenPasswordSchema,
+  updateUserCurrentPasswordSchema,
+  updateUserDetailsSchema,
 } from "./user.zodschemas.js";
-import { isLoggedIn, validateSchema } from "../../../utils/route-protector.js";
+import { isLoggedIn, isVerified, validateSchema } from "../../../utils/route-protector.js";
 
 // create a new router
 const userRouter = Router();
@@ -60,16 +66,28 @@ userRouter.patch("/refresh-access-token", refreshAccessToken);
 userRouter.post("/resend-verification-email", isLoggedIn, resendVerificationEmail);
 
 // @route GET /profile
-userRouter.get("/profile", isLoggedIn);
+userRouter.get("/profile", isLoggedIn, isVerified, getLoggedInUserProfile);
 
 // @route PATCH /update-avatar
-userRouter.patch("/update-avatar", isLoggedIn);
+userRouter.patch("/update-avatar", isLoggedIn, isVerified, updateUserAvatar);
 
 // @route PATCH /update-profile
-userRouter.patch("/update-profile", isLoggedIn);
+userRouter.patch(
+  "/update-profile",
+  isLoggedIn,
+  isVerified,
+  validateSchema(updateUserDetailsSchema),
+  updateUserDetails,
+);
 
 // @route PATCH /update-password
-userRouter.patch("/update-password", isLoggedIn);
+userRouter.patch(
+  "/update-password",
+  isLoggedIn,
+  isVerified,
+  validateSchema(updateUserCurrentPasswordSchema),
+  updateUserCurrentPassword,
+);
 
 // @route DELETE /delete-account
 userRouter.delete("/delete-account", isLoggedIn);
