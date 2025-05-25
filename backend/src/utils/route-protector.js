@@ -30,6 +30,19 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
   next();
 });
 
+// function to check if user is verified
+export const isVerified = asyncHandler(async (req, _, res) => {
+  // get user from db by it's id
+  const existingUser = await User.findById(req.user.id);
+
+  // check if user is verified
+  if (!existingUser.isEmailVerified)
+    throw new APIError(403, "Security Error", "Email verification required");
+
+  // forward request to next middleware
+  next();
+});
+
 // function to check for any validation errors
 export const validateSchema = zodSchema =>
   asyncHandler(async (req, _, next) => {
