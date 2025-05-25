@@ -12,14 +12,8 @@ import { AvailableUserRoles, UserRolesEnum } from "../../../utils/constants.js";
 const userSchema = new Schema(
   {
     avatar: {
-      type: {
-        url: String,
-        localPath: String,
-      },
-      default: {
-        url: "https://placehold.co/600x400",
-        localPath: "",
-      },
+      type: String,
+      default: "https://placehold.co/600x400",
     },
     username: {
       type: String,
@@ -80,15 +74,15 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 
 // method to generateAccessToken
 userSchema.methods.generateAccessToken = function () {
-  return jwt.sign({ id: this._id },  envConfig.ACCESS_TOKEN_SECRET, {
-    expiresIn:  envConfig.ACCESS_TOKEN_EXPIRY,
+  return jwt.sign({ id: this._id }, envConfig.ACCESS_TOKEN_SECRET, {
+    expiresIn: envConfig.ACCESS_TOKEN_EXPIRY,
   });
 };
 
 // method to generateRefreshToken
 userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign({ id: this._id },  envConfig.REFRESH_TOKEN_SECRET, {
-    expiresIn:  envConfig.REFRESH_TOKEN_EXPIRY,
+  return jwt.sign({ id: this._id }, envConfig.REFRESH_TOKEN_SECRET, {
+    expiresIn: envConfig.REFRESH_TOKEN_EXPIRY,
   });
 };
 
