@@ -8,7 +8,7 @@ import { userRouter } from "./user/user.routes.js";
 // create a new router
 const router = Router();
 
-// user routes
+// auth routes
 router.use("/admin", adminRouter);
 router.use("/user", userRouter);
 
