@@ -1,13 +1,43 @@
 // import package modules
 import { Router } from "express";
 
+// import local modules
+import { getAllUsers, updateUserRole } from "./admin.controllers.js";
+import { getAllUsersSchema, updateUserRoleSchema } from "./admin.zodschemas.js";
+import { UserRolesEnum } from "../../../utils/constants.js";
+import {
+  hasRequiredRole,
+  isLoggedIn,
+  isVerified,
+  validateSchema,
+} from "../../../utils/route-protector.js";
+
 // create a new router
 const adminRouter = Router();
 
-// @route GET /test
-adminRouter.get("/test", (req, res) => {
-  res.status(200).json({ message: "Admin route is working!" });
-});
+//                          --------------------------
+//                              PROTECTED ROUTES
+//                          --------------------------
+
+// @route POST /get-all-users
+adminRouter.post(
+  "/get-all-users",
+  isLoggedIn,
+  isVerified,
+  hasRequiredRole([UserRolesEnum.ADMIN]),
+  validateSchema(getAllUsersSchema),
+  getAllUsers,
+);
+
+// @route PATCH /update-user-role/:userId
+adminRouter.patch(
+  "/update-user-role/:userId",
+  isLoggedIn,
+  isVerified,
+  hasRequiredRole([UserRolesEnum.ADMIN]),
+  validateSchema(updateUserRoleSchema),
+  updateUserRole,
+);
 
 // export router
 export { adminRouter };
