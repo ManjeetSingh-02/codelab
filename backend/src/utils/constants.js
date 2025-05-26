@@ -19,3 +19,13 @@ export const UserStatesEnum = {
 
 // values array of the UserStatesEnum
 export const AvailableUserStates = Object.values(UserStatesEnum);
+
+// all possible problem difficulties
+export const ProblemDifficultiesEnum = {
+  EASY: "easy",
+  MEDIUM: "medium",
+  HARD: "hard",
+};
+
+// values array of the ProblemDifficultiesEnum
+export const AvailableProblemDifficulties = Object.values(ProblemDifficultiesEnum);
