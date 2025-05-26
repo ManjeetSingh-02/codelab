@@ -62,3 +62,20 @@ export const validateSchema = zodSchema =>
     // forward request to next middleware
     next();
   });
+
+// function for checking if user has required role
+export const hasRequiredRole = roles =>
+  asyncHandler(async (req, _, next) => {
+    // get user from db by it's id
+    const existingMember = await User.findById(req.user.id).select("role");
+
+    // check if user doesn't have any one of the required roles
+    if (!roles.includes(existingMember.role))
+      throw new APIError(403, "Security Error", "Access Denied for not having required role");
+
+    // set user role in request object
+    req.user.role = existingMember.role;
+
+    // forward request to next middleware
+    next();
+  });

@@ -74,3 +74,21 @@ export const accountDeletionConfirmationMailContentGenerator = username => {
     },
   };
 };
+
+// function to generate the content of role update confirmation email
+export const roleUpdateConfirmationMailContentGenerator = (username, role) => {
+  return {
+    body: {
+      name: username,
+      intro: `Your account role has been successfully changed to: ${role.toUpperCase()}.`,
+      action: {
+        instructions: "Login into your account to access updated role features.",
+        button: {
+          color: "#1a73e8",
+          text: "Log In",
+          link: `${envConfig.ORIGIN_URL}/login`,
+        },
+      },
+    },
+  };
+};
