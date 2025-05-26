@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // import local modules
-import { getAllUsers, updateUserRole } from "./admin.controllers.js";
+import { getAllRoles, getAllUsers, updateUserRole } from "./admin.controllers.js";
 import { getAllUsersSchema, updateUserRoleSchema } from "./admin.zodschemas.js";
 import { UserRolesEnum } from "../../../utils/constants.js";
 import {
@@ -27,6 +27,15 @@ adminRouter.post(
   hasRequiredRole([UserRolesEnum.ADMIN]),
   validateSchema(getAllUsersSchema),
   getAllUsers,
+);
+
+// @route GET /get-all-roles
+adminRouter.get(
+  "/get-all-roles",
+  isLoggedIn,
+  isVerified,
+  hasRequiredRole([UserRolesEnum.ADMIN]),
+  getAllRoles,
 );
 
 // @route PATCH /update-user-role/:userId

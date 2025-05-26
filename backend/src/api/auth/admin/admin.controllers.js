@@ -5,7 +5,7 @@ import { APIError } from "../../error.api.js";
 import { APIResponse } from "../../response.api.js";
 import { sendMail } from "../../../utils/mail/send.mail.js";
 import { roleUpdateConfirmationMailContentGenerator } from "../../../utils/mail/genContent.mail.js";
-import { UserRolesEnum } from "../../../utils/constants.js";
+import { UserRolesEnum, AvailableUserRoles } from "../../../utils/constants.js";
 
 // @sub-controllers for /get-all-users
 const userTypes = {
@@ -40,6 +40,16 @@ export const getAllUsers = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new APIResponse(200, `${userType.toUpperCase()} users fetched successfully`, allUsers));
+});
+
+// @controller GET /get-all-roles
+export const getAllRoles = asyncHandler(async (_, res) => {
+  // success status to user
+  return res.status(200).json(
+    new APIResponse(200, "All roles fetched successfully", {
+      roles: AvailableUserRoles,
+    }),
+  );
 });
 
 // @controller PATCH /update-user-role/:userId
