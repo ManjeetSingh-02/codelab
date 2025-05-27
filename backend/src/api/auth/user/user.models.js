@@ -81,6 +81,11 @@ const userSchema = new Schema(
     emailVerificationExpiry: {
       type: Date,
     },
+    solvedProblems: {
+      type: [Schema.Types.ObjectId],
+      ref: "Problem",
+      default: [],
+    },
   },
   { timestamps: true },
 );
