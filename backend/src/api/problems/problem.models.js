@@ -11,12 +11,6 @@ const codeSnippetSchema = new Schema({
   code: { type: String, trim: true, default: "" },
 });
 
-// schema for code solutions
-const codeSolutionsSchema = new Schema({
-  language: { type: String, trim: true, required: true },
-  code: { type: String, trim: true, required: true },
-});
-
 // schema for editorial
 const editorialSchema = new Schema({
   problemBreakdown: { type: String, trim: true, default: "" },
@@ -92,7 +86,7 @@ const problemSchema = new Schema(
       required: true,
     },
     codeSolutions: {
-      type: [codeSolutionsSchema],
+      type: [codeSnippetSchema],
       required: true,
     },
     slug: {

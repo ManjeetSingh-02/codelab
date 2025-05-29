@@ -57,3 +57,55 @@ export const Judge0LanguagesIdMap = {
     compiler: "JavaScript (Node.js 18.15.0)",
   },
 };
+
+// all possible judge0 error ids
+export const Judge0ErrorIdMap = {
+  3: {
+    statusCode: 200,
+    statusMessage: "Accepted",
+  },
+  4: {
+    statusCode: 400,
+    statusMessage: "Wrong Answer",
+  },
+  5: {
+    statusCode: 408,
+    statusMessage: "Time Limit Exceeded",
+  },
+  6: {
+    statusCode: 422,
+    statusMessage: "Compilation Error",
+  },
+  7: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: Segmentation Fault",
+  },
+  8: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: File Size Limit Exceeded",
+  },
+  9: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: Floating Point Exception",
+  },
+  10: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: Program Aborted Unexpectedly",
+  },
+  11: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: Program Exited with a code other than 0",
+  },
+  12: {
+    statusCode: 500,
+    statusMessage: "Runtime Error: Unknown",
+  },
+  13: {
+    statusCode: 500,
+    statusMessage: "Internal Error",
+  },
+  14: {
+    statusCode: 500,
+    statusMessage: "Exec Format Error: Invalid Executable Format",
+  },
+};
