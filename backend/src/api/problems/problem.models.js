@@ -99,7 +99,6 @@ const problemSchema = new Schema(
       type: String,
       trim: true,
       unique: true,
-      required: true,
       lowercase: true,
     },
   },
