@@ -243,8 +243,6 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
   // update user in db
   await existingUser.save({ validateBeforeSave: false });
 
-  console.log(refreshToken);
-
   // success status to user, save accessToken and refreshToken into cookies
   return res
     .status(200)
