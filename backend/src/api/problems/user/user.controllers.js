@@ -8,7 +8,7 @@ import { User } from "../../auth/user/user.models.js";
 // @controller GET /
 export const getAllProblems = asyncHandler(async (req, res) => {
   // get all problems from db
-  const allProblems = await Problem.find({}).select("title difficulty tags");
+  const allProblems = await Problem.find({}).select("title difficulty tags slug");
 
   // check if user is viewing problems anonymously or logged in to show solved status
   if (req.user?.id) {
