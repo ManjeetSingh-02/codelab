@@ -30,8 +30,8 @@ export const submitBatchAndGetTokens = async submissions => {
   }
 };
 
-// function to get all submission results by pooling tokens
-export const poolBatchTokensAndGetResults = async tokens => {
+// function to get all submission results by polling tokens
+export const pollBatchTokensAndGetResults = async tokens => {
   try {
     // loop to continuously check for submission results
     while (true) {

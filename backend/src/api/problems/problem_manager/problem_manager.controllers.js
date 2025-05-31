@@ -7,7 +7,7 @@ import { APIError } from "../../error.api.js";
 import { APIResponse } from "../../response.api.js";
 import { Problem } from "../problem.models.js";
 import { Judge0LanguagesIdMap, Judge0ErrorIdMap } from "../../../utils/constants.js";
-import { submitBatchAndGetTokens, poolBatchTokensAndGetResults } from "../../../utils/judge0.js";
+import { submitBatchAndGetTokens, pollBatchTokensAndGetResults } from "../../../utils/judge0.js";
 
 // @controller POST /
 export const createProblem = asyncHandler(async (req, res) => {
@@ -59,7 +59,7 @@ export const createProblem = asyncHandler(async (req, res) => {
       const submissionTokens = submissionResult.map(submission => submission.token);
 
       // check if all submissions are correct
-      const finalResults = await poolBatchTokensAndGetResults(submissionTokens);
+      const finalResults = await pollBatchTokensAndGetResults(submissionTokens);
 
       // check if finalResults is an error
       if (finalResults instanceof Error)
