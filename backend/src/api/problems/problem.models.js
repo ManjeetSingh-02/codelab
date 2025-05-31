@@ -4,32 +4,58 @@ import mongoose, { Schema } from "mongoose";
 // import local modules
 import { AvailableJudge0Languages, AvailableProblemDifficulties } from "../../utils/constants.js";
 
-// schema for code snippet
-const codeSnippetSchema = new Schema({
-  language: { type: String, enum: AvailableJudge0Languages, required: true },
-  code: { type: String, trim: true, required: true },
-});
-
-// schema for editorial
-const editorialSchema = new Schema({
-  problemBreakdown: { type: String, trim: true, required: true },
-  solutionApproachDiscussion: { type: String, trim: true, required: true },
-  timeAndSpaceComplexityDiscussion: { type: String, trim: true, required: true },
-  edgeCasesDiscussion: { type: String, trim: true, required: true },
-  solutionCode: { type: [codeSnippetSchema], required: true },
-});
-
 // schema for examples
 const exampleSchema = new Schema({
-  input: { type: String, trim: true, required: true },
+  input: { type: String, trim: true, default: "" },
   output: { type: String, trim: true, required: true },
   explanation: { type: String, trim: true, required: true },
 });
 
+// schema for editorial
+const editorialSchema = new Schema({
+  problemBreakdown: { type: [String], required: true },
+  solutionApproachDiscussion: { type: [String], required: true },
+  timeComplexityDiscussion: {
+    bestCase: { type: String, required: true },
+    averageCase: { type: String, required: true },
+    worstCase: { type: String, required: true },
+  },
+  spaceComplexityDiscussion: {
+    bestCase: { type: String, required: true },
+    averageCase: { type: String, required: true },
+    worstCase: { type: String, required: true },
+  },
+  edgeCasesDiscussion: {
+    type: [
+      {
+        case: { type: String, default: "" },
+        discussion: { type: String, default: "" },
+      },
+    ],
+    default: [],
+  },
+  solutionCode: {
+    type: [
+      {
+        language: { type: String, enum: AvailableJudge0Languages, required: true },
+        code: { type: String, trim: true, required: true },
+      },
+    ],
+  },
+});
+
 // schema for test cases
 const testCaseSchema = new Schema({
-  input: { type: String, trim: true, required: true },
+  input: { type: String, trim: true, default: "" },
   output: { type: String, trim: true, required: true },
+  isLocked: { type: Boolean, required: true },
+});
+
+// schema for code information
+const codeInformationSchema = new Schema({
+  language: { type: String, enum: AvailableJudge0Languages, required: true },
+  snippet: { type: String, trim: true, required: true },
+  solution: { type: String, trim: true, required: true },
 });
 
 // schema for problem
@@ -80,12 +106,8 @@ const problemSchema = new Schema(
       type: [testCaseSchema],
       required: true,
     },
-    codeSnippets: {
-      type: [codeSnippetSchema],
-      required: true,
-    },
-    codeSolutions: {
-      type: [codeSnippetSchema],
+    codeInformations: {
+      type: [codeInformationSchema],
       required: true,
     },
     slug: {
