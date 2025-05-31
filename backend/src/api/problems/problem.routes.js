@@ -2,17 +2,35 @@
 import { Router } from "express";
 
 // import local modules
-import { adminRouter } from "./admin/admin.routes.js";
-import { problemManagerRouter } from "./problem_manager/problem_manager.routes.js";
-import { userRouter } from "./user/user.routes.js";
+import { getAllProblems, getOneProblem } from "./user/user.controllers.js";
+import { createProblem } from "./problem_manager/problem_manager.controllers.js";
+import {
+  hasRequiredRole,
+  isLoggedIn,
+  isVerified,
+  validateSchema,
+} from "../../utils/route-protector.js";
+import { createProblemSchema } from "./problem.zodschemas.js";
+import { UserRolesEnum } from "../../utils/constants.js";
 
 // create a new router
 const router = Router();
 
-// user routes
-router.use("/admin", adminRouter);
-router.use("/problem-manager", problemManagerRouter);
-router.use("/user", userRouter);
+// @route GET /
+router.get("/", getAllProblems);
+
+// @route GET /:problemSlug
+router.get("/:problemSlug", getOneProblem);
+
+// @route POST /
+router.post(
+  "/",
+  isLoggedIn,
+  isVerified,
+  hasRequiredRole([UserRolesEnum.ADMIN, UserRolesEnum.PROBLEM_MANAGER]),
+  validateSchema(createProblemSchema),
+  createProblem,
+);
 
 // export router
 export default router;
