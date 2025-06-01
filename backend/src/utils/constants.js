@@ -58,3 +58,6 @@ export const Judge0ErrorIdMap = {
   13: { statusCode: 500, statusMessage: "Internal Error" },
   14: { statusCode: 500, statusMessage: "Exec Format Error: Invalid Executable Format" },
 };
+
+// values array of the Judge0ErrorIdMap error messages
+export const AvailableJudge0ErrorIdMessages = Object.values(Judge0ErrorIdMap).map(e => e.statusMessage);
