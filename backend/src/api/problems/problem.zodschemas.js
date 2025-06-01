@@ -99,8 +99,9 @@ const codeInformationSchema = z.object({
 export const createProblemSchema = z.object({
   title: problemTitleSchema,
   description: problemDescriptionSchema,
-  difficulty: z.enum(AvailableProblemDifficulties),
-  // check tags are unique
+  difficulty: z.enum(AvailableProblemDifficulties, {
+    message: "Invalid problem difficulty",
+  }),
   tags: z.array(z.string().trim()).refine(tags => new Set(tags).size === tags.length, {
     message: "Tags must be unique",
   }),
@@ -112,6 +113,39 @@ export const createProblemSchema = z.object({
     .min(1, { message: "At least one constraint is required" }),
   hints: z.array(z.string().trim()).default([]),
   editorial: problemEditorialSchema,
+  testCases: z.array(testCaseSchema).min(1, {
+    message: "At least one test case is required",
+  }),
+  codeInformations: z.array(codeInformationSchema).min(1, {
+    message: "At least one code information is required",
+  }),
+});
+
+// zod schema for updateProblemInformation
+export const updateProblemInformationSchema = z.object({
+  description: problemDescriptionSchema,
+  difficulty: z.enum(AvailableProblemDifficulties, {
+    message: "Invalid problem difficulty",
+  }),
+  tags: z.array(z.string().trim()).refine(tags => new Set(tags).size === tags.length, {
+    message: "Tags must be unique",
+  }),
+  examples: z.array(problemExampleSchema).min(1, {
+    message: "At least one example is required",
+  }),
+  constraints: z
+    .array(z.string().trim())
+    .min(1, { message: "At least one constraint is required" }),
+  hints: z.array(z.string().trim()).default([]),
+});
+
+// zod schema for updateProblemEditorial
+export const updateProblemEditorialSchema = z.object({
+  editorial: problemEditorialSchema,
+});
+
+// zod schema for updateProblemTestCasesAndCodeInformations
+export const updateProblemTestCasesAndCodeInformationsSchema = z.object({
   testCases: z.array(testCaseSchema).min(1, {
     message: "At least one test case is required",
   }),
