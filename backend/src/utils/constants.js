@@ -32,10 +32,12 @@ export const AvailableProblemDifficulties = Object.values(ProblemDifficultiesEnu
 
 // all problem solving languages judge0 id
 export const Judge0LanguagesIdMap = {
-  CPP: { id: 105, compiler: "C++ (GCC 14.1.0)" },
+  C: { id: 50, compiler: "C (GCC 9.2.0)" },
+  CPP: { id: 54, compiler: "C++ (GCC 9.2.0)" },
+  PYTHON2: { id: 70, compiler: "Python (2.7.17)" },
   PYTHON3: { id: 71, compiler: "Python (3.8.1)" },
   JAVA: { id: 62, compiler: "Java (OpenJDK 13.0.1)" },
-  JAVASCRIPT: { id: 93, compiler: "JavaScript (Node.js 18.15.0)" },
+  JAVASCRIPT: { id: 63, compiler: "JavaScript (Node.js 12.14.0)" },
 };
 
 // keys array of the Judge0LanguagesIdMap to obtain languages names

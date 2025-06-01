@@ -15,8 +15,6 @@ export const submitBatchAndGetTokens = async submissions => {
         base64_encoded: "false",
       },
       headers: {
-        "x-rapidapi-key": `${envConfig.JUDGE0_API_KEY}`,
-        "x-rapidapi-host": `${envConfig.JUDGE0_API_HOST}`,
         "Content-Type": "application/json",
       },
       data: {
@@ -43,10 +41,6 @@ export const pollBatchTokensAndGetResults = async tokens => {
           tokens: tokens.join(","),
           base64_encoded: "false",
           fields: "*",
-        },
-        headers: {
-          "x-rapidapi-key": `${envConfig.JUDGE0_API_KEY}`,
-          "x-rapidapi-host": `${envConfig.JUDGE0_API_HOST}`,
         },
       });
 

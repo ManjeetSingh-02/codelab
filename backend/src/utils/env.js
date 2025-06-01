@@ -25,8 +25,6 @@ export const envConfig = {
   IMGHANDLER_API_SECRET: String(process.env.IMGHANDLER_API_SECRET),
   IMGHANDLER_FOLDER_NAME: String(process.env.IMGHANDLER_FOLDER_NAME),
   JUDGE0_API_URL: String(process.env.JUDGE0_API_URL),
-  JUDGE0_API_KEY: String(process.env.JUDGE0_API_KEY),
-  JUDGE0_API_HOST: String(process.env.JUDGE0_API_HOST),
 };
 
 // zod schema for environment variables
@@ -59,8 +57,6 @@ export const envSchema = z.object({
   IMGHANDLER_API_SECRET: z.string(),
   IMGHANDLER_FOLDER_NAME: z.string(),
   JUDGE0_API_URL: z.string().url({ message: "JUDGE0_API_URL must be a valid URL" }),
-  JUDGE0_API_KEY: z.string(),
-  JUDGE0_API_HOST: z.string(),
 });
 
 // function to validate environment variables
