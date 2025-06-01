@@ -128,6 +128,11 @@ const problemSchema = new Schema(
       unique: true,
       lowercase: true,
     },
+    solvedBy: {
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
   },
   { timestamps: true },
 );
