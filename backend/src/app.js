@@ -36,7 +36,8 @@ app.use(express.static("public"));
 // middlewares for handling API routes
 app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/problems", problemsRouter)
+app.use("/api/v1/problems", problemsRouter);
+app.use("/api/v1/execute-code", codeExecutionRouter);
 
 // export app
 export default app;
