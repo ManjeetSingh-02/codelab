@@ -111,13 +111,13 @@ export const updateProblemInformation = asyncHandler(async (req, res) => {
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
   if (!existingProblem)
-    throw new APIError(404, "Update Problem Editorial Error", "Problem doesn't exist");
+    throw new APIError(404, "Update Problem Information Error", "Problem doesn't exist");
 
-  // check if user in not admin and trying to update editorial of other's problem
+  // check if user in not admin and trying to update information of other's problem
   if (req.user.role !== UserRolesEnum.ADMIN && req.user.id !== existingProblem.createdBy.toString())
     throw new APIError(
       403,
-      "Update Problem Editorial Error",
+      "Update Problem Information Error",
       "Access Denied for not having required permissions",
     );
 
@@ -172,13 +172,17 @@ export const updateProblemTestCasesAndCodeInformations = asyncHandler(async (req
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
   if (!existingProblem)
-    throw new APIError(404, "Update Problem Editorial Error", "Problem doesn't exist");
+    throw new APIError(
+      404,
+      "Update Problem Test Cases and Code Informations Error",
+      "Problem doesn't exist",
+    );
 
-  // check if user in not admin and trying to update editorial of other's problem
+  // check if user in not admin and trying to update test cases and code informations of other's problem
   if (req.user.role !== UserRolesEnum.ADMIN && req.user.id !== existingProblem.createdBy.toString())
     throw new APIError(
       403,
-      "Update Problem Editorial Error",
+      "Update Problem Test Cases and Code Informations Error",
       "Access Denied for not having required permissions",
     );
 
@@ -250,4 +254,25 @@ export const updateProblemTestCasesAndCodeInformations = asyncHandler(async (req
   res
     .status(200)
     .json(new APIResponse(200, "Problem Test Cases and Code Informations Updated Successfully"));
+});
+
+// @controller DELETE /:problemSlug
+export const deleteProblem = asyncHandler(async (req, res) => {
+  // find problem by slug
+  const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
+  if (!existingProblem) throw new APIError(404, "Delete Problem Error", "Problem doesn't exist");
+
+  // check if user in not admin and trying to delete other's problem
+  if (req.user.role !== UserRolesEnum.ADMIN && req.user.id !== existingProblem.createdBy.toString())
+    throw new APIError(
+      403,
+      "Delete Problem Error",
+      "Access Denied for not having required permissions",
+    );
+
+  // delete problem
+  await existingProblem.deleteOne();
+
+  // success status to user
+  res.status(200).json(new APIResponse(200, "Problem Deleted Successfully"));
 });

@@ -5,6 +5,7 @@ import { Router } from "express";
 import { getAllProblems, getOneProblem } from "./user/user.controllers.js";
 import {
   createProblem,
+  deleteProblem,
   updateProblemEditorial,
   updateProblemInformation,
   updateProblemTestCasesAndCodeInformations,
@@ -70,6 +71,15 @@ router.patch(
   hasRequiredRole([UserRolesEnum.ADMIN, UserRolesEnum.PROBLEM_MANAGER]),
   validateSchema(updateProblemTestCasesAndCodeInformationsSchema),
   updateProblemTestCasesAndCodeInformations,
+);
+
+// @route DELETE /:problemSlug
+router.delete(
+  "/:problemSlug",
+  isLoggedIn,
+  isVerified,
+  hasRequiredRole([UserRolesEnum.ADMIN, UserRolesEnum.PROBLEM_MANAGER]),
+  deleteProblem,
 );
 
 // export router
