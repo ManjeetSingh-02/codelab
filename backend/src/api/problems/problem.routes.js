@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // import local modules
-import { getAllProblems, getOneProblem } from "./user/user.controllers.js";
+import { getAllProblems, getAllSolvedProblems, getOneProblem } from "./user/user.controllers.js";
 import {
   createProblem,
   deleteProblem,
@@ -29,6 +29,9 @@ const router = Router();
 
 // @route GET /
 router.get("/", getAllProblems);
+
+// @route GET /solved
+router.get("/solved", isLoggedIn, isVerified, getAllSolvedProblems);
 
 // @route GET /:problemSlug
 router.get("/:problemSlug", getOneProblem);
