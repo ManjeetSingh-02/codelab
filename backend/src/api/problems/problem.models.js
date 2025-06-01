@@ -5,58 +5,70 @@ import mongoose, { Schema } from "mongoose";
 import { AvailableJudge0Languages, AvailableProblemDifficulties } from "../../utils/constants.js";
 
 // schema for examples
-const exampleSchema = new Schema({
-  input: { type: String, trim: true, default: "" },
-  output: { type: String, trim: true, required: true },
-  explanation: { type: String, trim: true, required: true },
-});
+const exampleSchema = new Schema(
+  {
+    input: { type: String, trim: true, default: "" },
+    output: { type: String, trim: true, required: true },
+    explanation: { type: String, trim: true, required: true },
+  },
+  { _id: false },
+);
 
 // schema for editorial
-const editorialSchema = new Schema({
-  problemBreakdown: { type: [String], required: true },
-  solutionApproachDiscussion: { type: [String], required: true },
-  timeComplexityDiscussion: {
-    bestCase: { type: String, required: true },
-    averageCase: { type: String, required: true },
-    worstCase: { type: String, required: true },
+const editorialSchema = new Schema(
+  {
+    problemBreakdown: { type: [String], required: true },
+    solutionApproachDiscussion: { type: [String], required: true },
+    timeComplexityDiscussion: {
+      bestCase: { type: String, required: true },
+      averageCase: { type: String, required: true },
+      worstCase: { type: String, required: true },
+    },
+    spaceComplexityDiscussion: {
+      bestCase: { type: String, required: true },
+      averageCase: { type: String, required: true },
+      worstCase: { type: String, required: true },
+    },
+    edgeCasesDiscussion: {
+      type: [
+        {
+          case: { type: String, default: "" },
+          discussion: { type: String, default: "" },
+        },
+      ],
+      default: [],
+    },
+    solutionCode: {
+      type: [
+        {
+          language: { type: String, enum: AvailableJudge0Languages, required: true },
+          code: { type: String, trim: true, required: true },
+        },
+      ],
+    },
   },
-  spaceComplexityDiscussion: {
-    bestCase: { type: String, required: true },
-    averageCase: { type: String, required: true },
-    worstCase: { type: String, required: true },
-  },
-  edgeCasesDiscussion: {
-    type: [
-      {
-        case: { type: String, default: "" },
-        discussion: { type: String, default: "" },
-      },
-    ],
-    default: [],
-  },
-  solutionCode: {
-    type: [
-      {
-        language: { type: String, enum: AvailableJudge0Languages, required: true },
-        code: { type: String, trim: true, required: true },
-      },
-    ],
-  },
-});
+  { _id: false },
+);
 
 // schema for test cases
-const testCaseSchema = new Schema({
-  input: { type: String, trim: true, default: "" },
-  output: { type: String, trim: true, required: true },
-  isLocked: { type: Boolean, required: true },
-});
+const testCaseSchema = new Schema(
+  {
+    input: { type: String, trim: true, default: "" },
+    output: { type: String, trim: true, required: true },
+    isLocked: { type: Boolean, required: true },
+  },
+  { _id: false },
+);
 
 // schema for code information
-const codeInformationSchema = new Schema({
-  language: { type: String, enum: AvailableJudge0Languages, required: true },
-  snippet: { type: String, trim: true, required: true },
-  solution: { type: String, trim: true, required: true },
-});
+const codeInformationSchema = new Schema(
+  {
+    language: { type: String, enum: AvailableJudge0Languages, required: true },
+    snippet: { type: String, trim: true, required: true },
+    solution: { type: String, trim: true, required: true },
+  },
+  { _id: false },
+);
 
 // schema for problem
 const problemSchema = new Schema(
