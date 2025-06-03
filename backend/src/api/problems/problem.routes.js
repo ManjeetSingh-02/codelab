@@ -2,13 +2,7 @@
 import { Router } from "express";
 
 // import local modules
-import {
-  getAllProblems,
-  getAllSolvedProblems,
-  getOneProblem,
-  runCode,
-  submitCode,
-} from "./user/user.controllers.js";
+import { getAllProblems, getOneProblem, runCode, submitCode } from "./user/user.controllers.js";
 import {
   createProblem,
   deleteProblem,
