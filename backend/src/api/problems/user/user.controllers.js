@@ -58,3 +58,9 @@ export const getAllSolvedProblems = asyncHandler(async (req, res) => {
     .status(200)
     .json(new APIResponse(200, "All solved problems fetched successfully", allSolvedProblems));
 });
+
+// @controller POST /:problemSlug/run-code
+export const runCode = asyncHandler(async (req, res) => {});
+
+// @controller POST /:problemSlug/submit-code
+export const submitCode = asyncHandler(async (req, res) => {});

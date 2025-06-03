@@ -2,7 +2,13 @@
 import { Router } from "express";
 
 // import local modules
-import { getAllProblems, getAllSolvedProblems, getOneProblem } from "./user/user.controllers.js";
+import {
+  getAllProblems,
+  getAllSolvedProblems,
+  getOneProblem,
+  runCode,
+  submitCode,
+} from "./user/user.controllers.js";
 import {
   createProblem,
   deleteProblem,
@@ -11,6 +17,7 @@ import {
   updateProblemTestCasesAndCodeInformations,
 } from "./problem_manager/problem_manager.controllers.js";
 import {
+  executeCode,
   hasRequiredRole,
   isLoggedIn,
   isVerified,
@@ -23,6 +30,7 @@ import {
   updateProblemTestCasesAndCodeInformationsSchema,
 } from "./problem.zodschemas.js";
 import { UserRolesEnum } from "../../utils/constants.js";
+import { executeCodeSchema } from "./execute-code.zodschemas.js";
 
 // create a new router
 const router = Router();
@@ -35,6 +43,26 @@ router.get("/solved", isLoggedIn, isVerified, getAllSolvedProblems);
 
 // @route GET /:problemSlug
 router.get("/:problemSlug", getOneProblem);
+
+// @route POST /:problemSlug/run-code
+router.post(
+  "/:problemSlug/run-code",
+  isLoggedIn,
+  isVerified,
+  validateSchema(executeCodeSchema),
+  executeCode,
+  runCode,
+);
+
+// @route POST /:problemSlug/submit-code
+router.post(
+  "/:problemSlug/submit-code",
+  isLoggedIn,
+  isVerified,
+  validateSchema(executeCodeSchema),
+  executeCode,
+  submitCode,
+);
 
 // @route POST /
 router.post(
