@@ -12,15 +12,6 @@ export const getAllProblems = asyncHandler(async (req, res) => {
   // get all problems from db
   const allProblems = await Problem.find({}).select("title difficulty tags slug");
 
-  // check if user is viewing problems anonymously or logged in to show solved status
-  if (req.user?.id) {
-    // check if user already solved any problems
-    allProblems.forEach(async problem => {
-      const isProblemSolved = await User.findOne({ solvedProblems: problem._id });
-      if (isProblemSolved) problem.isSolvedByUser = true;
-    });
-  }
-
   // success status to user
   return res
     .status(200)
@@ -33,14 +24,7 @@ export const getOneProblem = asyncHandler(async (req, res) => {
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug })
     .select("-slug -__v -createdAt")
     .populate("createdBy", "_id username");
-  if (!existingProblem) throw new APIError(404, "Problem not found");
-
-  // check if user is viewing problem anonymously or logged in to show solved status
-  if (req.user?.id) {
-    // check if user already solved the problem
-    const isProblemSolved = await User.findOne({ solvedProblems: existingProblem._id });
-    if (isProblemSolved) existingProblem.isSolvedByUser = true;
-  }
+  if (!existingProblem) throw new APIError(404, "Get Problem Error", "Problem not found");
 
   // success status to user
   return res
@@ -73,7 +57,7 @@ export const submitCode = asyncHandler(async (req, res) => {
 
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
-  if (!existingProblem) throw new APIError(404, "Run Code Error", "Problem not found");
+  if (!existingProblem) throw new APIError(404, "Submit Code Error", "Problem not found");
 
   // get test cases execution result and execution status from the request
   const { testCasesExecutionResults, executionStatus } = req.problemExecutionResults;
