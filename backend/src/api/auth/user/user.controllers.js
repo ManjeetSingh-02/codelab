@@ -299,9 +299,9 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 // @controller GET /profile
 export const getLoggedInUserProfile = asyncHandler(async (req, res) => {
   // get user from db by it's id
-  const existingUser = await User.findById(req.user.id).select(
-    "_id username email fullname avatar",
-  );
+  const existingUser = await User.findById(req.user.id)
+    .select("_id username email fullname avatar role isEmailVerified solvedProblems createdAt")
+    .populate("solvedProblems", "_id title difficulty tags slug");
 
   // success status to user
   return res
