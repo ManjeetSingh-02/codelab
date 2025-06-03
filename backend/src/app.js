@@ -5,7 +5,12 @@ import cookieParser from "cookie-parser";
 
 // import local modules
 import { envConfig } from "./utils/env.js";
-import { authRouter, healthCheckRouter, problemsRouter } from "./api/routers.api.js";
+import {
+  authRouter,
+  healthCheckRouter,
+  problemsRouter,
+  submissionsRouter,
+} from "./api/routers.api.js";
 
 // create new express app
 const app = express();
@@ -37,6 +42,7 @@ app.use(express.static("public"));
 app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/problems", problemsRouter);
+app.use("/api/v1/submissions", submissionsRouter);
 
 // export app
 export default app;
