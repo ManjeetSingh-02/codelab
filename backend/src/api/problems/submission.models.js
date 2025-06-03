@@ -46,7 +46,7 @@ const testCaseResultSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true, _id: false },
 );
 
 // schema for submission

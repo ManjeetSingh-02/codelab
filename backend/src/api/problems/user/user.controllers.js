@@ -4,6 +4,8 @@ import { APIError } from "../../error.api.js";
 import { APIResponse } from "../../response.api.js";
 import { Problem } from "../problem.models.js";
 import { User } from "../../auth/user/user.models.js";
+import { Submission } from "../submission.models.js";
+import { SubmissionStatusEnum } from "../../../utils/constants.js";
 
 // @controller GET /
 export const getAllProblems = asyncHandler(async (req, res) => {
@@ -65,4 +67,46 @@ export const runCode = asyncHandler(async (req, res) => {
 });
 
 // @controller POST /:problemSlug/submit-code
-export const submitCode = asyncHandler(async (req, res) => {});
+export const submitCode = asyncHandler(async (req, res) => {
+  // get data from body
+  const { source_code, language } = req.body;
+
+  // find problem by slug
+  const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
+  if (!existingProblem) throw new APIError(404, "Run Code Error", "Problem not found");
+
+  // get test cases execution result and execution status from the request
+  const { testCasesExecutionResults, executionStatus } = req.problemExecutionResults;
+
+  // create a new submission
+  const newSubmission = await Submission.create({
+    problemId: existingProblem._id,
+    userId: req.user.id,
+    sourceCode: source_code,
+    language,
+    status: executionStatus,
+    testCases: testCasesExecutionResults,
+  });
+  if (!newSubmission)
+    throw new APIError(500, "Submit Code Error", "Something went wrong while submitting code");
+
+  // if problem is solved successfully by user first time, update user's solvedProblems and problem's solvedBy fields
+  if (
+    executionStatus === SubmissionStatusEnum.ACCEPTED &&
+    !existingProblem.solvedBy.includes(req.user.id)
+  ) {
+    // get user by id
+    const existingUser = await User.findById(req.user.id);
+
+    // update user's solvedProblems
+    existingUser.solvedProblems.push(existingProblem._id);
+    await existingUser.save();
+
+    // update problem's solvedBy
+    existingProblem.solvedBy.push(existingUser._id);
+    await existingProblem.save();
+  }
+
+  // success status to user
+  return res.status(201).json(new APIResponse(201, "Code Submitted Successfully", newSubmission));
+});
