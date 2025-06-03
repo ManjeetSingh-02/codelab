@@ -2,16 +2,15 @@
 import mongoose, { Schema } from "mongoose";
 
 // import local modules
-import { AvailableJudge0ErrorIdMessages, AvailableJudge0Languages } from "../../utils/constants.js";
+import {
+  AvailableJudge0ErrorIdMessages,
+  AvailableJudge0Languages,
+  AvailableSubmissionStatuses,
+} from "../../utils/constants.js";
 
 // schema for testCaseResult
 const testCaseResultSchema = new Schema(
   {
-    submissionId: {
-      type: Schema.Types.ObjectId,
-      ref: "Submission",
-      required: true,
-    },
     testCase: {
       type: Number,
       required: true,
@@ -22,31 +21,24 @@ const testCaseResultSchema = new Schema(
     },
     stdin: {
       type: String,
-      default: "",
     },
     stdout: {
       type: String,
-      default: "",
     },
     expectedOutput: {
       type: String,
-      default: "",
     },
     stderr: {
       type: String,
-      default: "",
     },
     compileOutput: {
       type: String,
-      default: "",
     },
     memory: {
-      type: Number,
-      default: 0,
+      type: String,
     },
     time: {
-      type: Number,
-      default: 0,
+      type: String,
     },
     status: {
       type: String,
@@ -79,33 +71,9 @@ const submissionSchema = new Schema(
       enum: AvailableJudge0Languages,
       required: true,
     },
-    stdin: {
-      type: String,
-      default: "",
-    },
-    stdout: {
-      type: String,
-      default: "",
-    },
-    stderr: {
-      type: String,
-      default: "",
-    },
-    compileOutput: {
-      type: String,
-      default: "",
-    },
-    memory: {
-      type: Number,
-      default: 0,
-    },
-    time: {
-      type: Number,
-      default: 0,
-    },
     status: {
       type: String,
-      enum: AvailableJudge0ErrorIdMessages,
+      enum: AvailableSubmissionStatuses,
       required: true,
     },
     testCases: {

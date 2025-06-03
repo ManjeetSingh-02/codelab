@@ -60,4 +60,15 @@ export const Judge0ErrorIdMap = {
 };
 
 // values array of the Judge0ErrorIdMap error messages
-export const AvailableJudge0ErrorIdMessages = Object.values(Judge0ErrorIdMap).map(e => e.statusMessage);
+export const AvailableJudge0ErrorIdMessages = Object.values(Judge0ErrorIdMap).map(
+  e => e.statusMessage,
+);
+
+// all possible status of submissions
+export const SubmissionStatusEnum = {
+  ACCEPTED: "Accepted",
+  WRONG_ANSWER: "Wrong Answer",
+};
+
+// values array of the SubmissionStatusEnum
+export const AvailableSubmissionStatuses = Object.values(SubmissionStatusEnum);
