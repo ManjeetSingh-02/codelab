@@ -8,10 +8,10 @@ import { getAllProblemSubmissions, getAllUserSubmissions } from "./submission.co
 // create a new router
 const router = Router();
 
-// @route GET /:problemSlug
+// @route GET /
 router.get("/", isLoggedIn, isVerified, getAllUserSubmissions);
 
-// @route GET /
+// @route GET /:problemSlug
 router.get("/:problemSlug", isLoggedIn, isVerified, getAllProblemSubmissions);
 
 // export router
