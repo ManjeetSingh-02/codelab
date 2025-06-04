@@ -72,3 +72,12 @@ export const SubmissionStatusEnum = {
 
 // values array of the SubmissionStatusEnum
 export const AvailableSubmissionStatuses = Object.values(SubmissionStatusEnum);
+
+// all possible status of sheets
+export const SheetStatusEnum = {
+  PUBLIC: "public",
+  PRIVATE: "private",
+};
+
+// values array of the SheetStatusEnum
+export const AvailableSheetStatuses = Object.values(SheetStatusEnum);
