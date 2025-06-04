@@ -8,7 +8,7 @@ import { Submission } from "../../submissions/submission.models.js";
 import { SubmissionStatusEnum } from "../../../utils/constants.js";
 
 // @controller GET /
-export const getAllProblems = asyncHandler(async (req, res) => {
+export const getAllProblems = asyncHandler(async (_, res) => {
   // get all problems from db
   const allProblems = await Problem.find({}).select("title difficulty tags slug solvedBy");
 
