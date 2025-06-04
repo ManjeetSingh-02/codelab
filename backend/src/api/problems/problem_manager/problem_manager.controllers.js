@@ -106,7 +106,7 @@ export const createProblem = asyncHandler(async (req, res) => {
   res.status(201).json(new APIResponse(201, "Problem created successfully"));
 });
 
-// @controller PATCH /:problemSlug/information
+// @controller PATCH /:problemSlug/update-information
 export const updateProblemInformation = asyncHandler(async (req, res) => {
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
@@ -139,7 +139,7 @@ export const updateProblemInformation = asyncHandler(async (req, res) => {
   res.status(200).json(new APIResponse(200, "Problem Information Updated Successfully"));
 });
 
-// @controller PATCH /:problemSlug/editorial
+// @controller PATCH /:problemSlug/update-editorial
 export const updateProblemEditorial = asyncHandler(async (req, res) => {
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });
@@ -167,7 +167,7 @@ export const updateProblemEditorial = asyncHandler(async (req, res) => {
   res.status(200).json(new APIResponse(200, "Problem Editorial Updated Successfully"));
 });
 
-// @controller PATCH /:problemSlug/testcases-codeinformations
+// @controller PATCH /:problemSlug/update-testcases-codeinformations
 export const updateProblemTestCasesAndCodeInformations = asyncHandler(async (req, res) => {
   // find problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });

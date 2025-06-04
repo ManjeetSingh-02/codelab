@@ -5,7 +5,7 @@ import { Problem } from "../problems/problem.models.js";
 import { APIResponse } from "../response.api.js";
 import { Submission } from "./submission.models.js";
 
-// @route GET /
+// @controller GET /
 export const getAllUserSubmissions = asyncHandler(async (req, res) => {
   // get all submissions made by the user
   const allSubmissions = await Submission.find({ userId: req.user.id })
@@ -18,7 +18,7 @@ export const getAllUserSubmissions = asyncHandler(async (req, res) => {
     .json(new APIResponse(200, "All user submissions fetched successfully", allSubmissions));
 });
 
-// @route GET /:problemSlug
+// @controller GET /:problemSlug
 export const getAllProblemSubmissions = asyncHandler(async (req, res) => {
   // get problem by slug
   const existingProblem = await Problem.findOne({ slug: req.params.problemSlug });

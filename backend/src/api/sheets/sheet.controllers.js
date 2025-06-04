@@ -8,7 +8,7 @@ import { APIError } from "../error.api.js";
 import { APIResponse } from "../response.api.js";
 import { Sheet } from "./sheet.models.js";
 
-// @route GET /
+// @controller GET /
 export const getAllSheets = asyncHandler(async (_, res) => {
   // get all sheets
   const allSheets = await Sheet.find({ status: SheetStatusEnum.PUBLIC }).select(
@@ -19,7 +19,7 @@ export const getAllSheets = asyncHandler(async (_, res) => {
   return res.status(200).json(new APIResponse(200, "All sheets fetched successfully", allSheets));
 });
 
-// @route GET /:sheetSlug
+// @controller GET /:sheetSlug
 export const getOneSheet = asyncHandler(async (req, res) => {
   // find sheet by slug
   const existingSheet = await Sheet.findOne({
@@ -38,7 +38,7 @@ export const getOneSheet = asyncHandler(async (req, res) => {
   return res.status(200).json(new APIResponse(200, "Sheet fetched successfully", existingSheet));
 });
 
-// @route GET /user/all-sheets
+// @controller GET /user/all-sheets
 export const getAllSheetsCreatedByUser = asyncHandler(async (req, res) => {
   // find all sheets created by user
   const allSheets = await Sheet.find({ createdBy: req.user.id }).select("-__v -createdBy");
@@ -49,7 +49,7 @@ export const getAllSheetsCreatedByUser = asyncHandler(async (req, res) => {
     .json(new APIResponse(200, "All sheets created by user fetched successfully", allSheets));
 });
 
-// @route POST /
+// @controller POST /
 export const createSheet = asyncHandler(async (req, res) => {
   // get data from body
   const { title, description } = req.body;
@@ -90,11 +90,11 @@ export const createSheet = asyncHandler(async (req, res) => {
   );
 });
 
-// @route PATCH /:sheetSlug/add-problem
+// @controller PATCH /:sheetSlug/add-problem
 export const addProblemToSheet = asyncHandler(async (req, res) => {});
 
-// @route PATCH /:sheetSlug/remove-problem
+// @controller PATCH /:sheetSlug/remove-problem
 export const removeProblemFromSheet = asyncHandler(async (req, res) => {});
 
-// @route DELETE /:sheetSlug
+// @controller DELETE /:sheetSlug
 export const deleteSheet = asyncHandler(async (req, res) => {});
