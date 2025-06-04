@@ -2,17 +2,20 @@
 import mongoose, { Schema } from "mongoose";
 
 // import local modules
-import { AvailableSheetStatuses } from "../../utils/constants";
+import { AvailableSheetStatuses } from "../../utils/constants.js";
 
 // schema for sheet
 const sheetSchema = new Schema(
   {
     title: {
       type: String,
+      trim: true,
+      unique: true,
       required: true,
     },
     description: {
       type: String,
+      trim: true,
       required: true,
     },
     createdBy: {
@@ -29,6 +32,12 @@ const sheetSchema = new Schema(
       type: [Schema.Types.ObjectId],
       ref: "Problem",
       default: [],
+    },
+    slug: {
+      type: String,
+      trim: true,
+      unique: true,
+      lowercase: true,
     },
   },
   { timestamps: true },
