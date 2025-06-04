@@ -1,3 +1,6 @@
+// import package modules
+import slugify from "slugify";
+
 // import local modules
 import { asyncHandler } from "../../utils/async-handler.js";
 import { SheetStatusEnum } from "../../utils/constants.js";
@@ -47,7 +50,45 @@ export const getAllSheetsCreatedByUser = asyncHandler(async (req, res) => {
 });
 
 // @route POST /
-export const createSheet = asyncHandler(async (req, res) => {});
+export const createSheet = asyncHandler(async (req, res) => {
+  // get data from body
+  const { title, description } = req.body;
+
+  // check if sheet with same title already exists which is created by user
+  const existingSheet = await Sheet.findOne({
+    title,
+    createdBy: req.user.id,
+  });
+  if (existingSheet)
+    throw new APIError(
+      400,
+      "Create Sheet Error",
+      "Sheet with same title already exists for current user",
+    );
+
+  // create new sheet
+  const newSheet = await Sheet.create({
+    title,
+    description,
+    createdBy: req.user.id,
+    slug: slugify(title, { lower: true, strict: true }),
+  });
+  if (!newSheet)
+    throw new APIError(500, "Create Sheet Error", "Something went wrong while creating sheet");
+
+  // success status to user
+  return res.status(201).json(
+    new APIResponse(201, "Sheet created successfully", {
+      _id: newSheet._id,
+      title: newSheet.title,
+      description: newSheet.description,
+      status: newSheet.status,
+      slug: newSheet.slug,
+      createdAt: newSheet.createdAt,
+      updatedAt: newSheet.updatedAt,
+    }),
+  );
+});
 
 // @route PATCH /:sheetSlug/add-problem
 export const addProblemToSheet = asyncHandler(async (req, res) => {});

@@ -12,6 +12,7 @@ import {
   getOneSheet,
   removeProblemFromSheet,
 } from "./sheet.controllers.js";
+import { createSheetSchema } from "./sheet.zodschemas.js";
 
 // create a new router
 const router = Router();
@@ -26,7 +27,7 @@ router.get("/:sheetSlug", isLoggedIn, isVerified, getOneSheet);
 router.get("/user/all-sheets", isLoggedIn, isVerified, getAllSheetsCreatedByUser);
 
 // @route POST /
-router.post("/", isLoggedIn, isVerified, validateSchema(), createSheet);
+router.post("/", isLoggedIn, isVerified, validateSchema(createSheetSchema), createSheet);
 
 // @route PATCH /:sheetSlug/add-problem
 router.patch(
