@@ -300,8 +300,11 @@ export const resendVerificationEmail = asyncHandler(async (req, res) => {
 export const getLoggedInUserProfile = asyncHandler(async (req, res) => {
   // get user from db by it's id
   const existingUser = await User.findById(req.user.id)
-    .select("_id username email fullname avatar role isEmailVerified solvedProblems createdAt")
-    .populate("solvedProblems", "_id title difficulty tags slug");
+    .select(
+      "_id username email fullname avatar role isEmailVerified solvedProblems sheets createdAt",
+    )
+    .populate("solvedProblems", "_id title difficulty tags slug")
+    .populate("sheets", "_id title status createdAt");
 
   // success status to user
   return res
