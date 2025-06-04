@@ -2,7 +2,13 @@
 import { Router } from "express";
 
 // import local modules
-import { getAllProblems, getOneProblem, runCode, submitCode } from "./user/user.controllers.js";
+import {
+  getAllProblems,
+  getAllSolvedProblems,
+  getOneProblem,
+  runCode,
+  submitCode,
+} from "./user/user.controllers.js";
 import {
   createProblem,
   deleteProblem,
@@ -34,6 +40,9 @@ router.get("/", getAllProblems);
 
 // @route GET /:problemSlug
 router.get("/:problemSlug", getOneProblem);
+
+// @route GET /user/solved
+router.get("/user/solved", isLoggedIn, isVerified, getAllSolvedProblems);
 
 // @route POST /:problemSlug/run-code
 router.post(

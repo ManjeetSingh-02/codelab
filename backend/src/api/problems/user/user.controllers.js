@@ -32,6 +32,19 @@ export const getOneProblem = asyncHandler(async (req, res) => {
     .json(new APIResponse(200, "Problem fetched successfully", existingProblem));
 });
 
+// @controller GET /user/solved
+export const getAllSolvedProblems = asyncHandler(async (req, res) => {
+  // get all problems solved by user
+  const allSolvedProblems = await User.findById(req.user.id)
+    .select("solvedProblems -_id")
+    .populate("solvedProblems", "title difficulty tags slug");
+
+  // success status to user
+  return res
+    .status(200)
+    .json(new APIResponse(200, "All solved problems fetched successfully", allSolvedProblems));
+});
+
 // @controller POST /:problemSlug/run-code
 export const runCode = asyncHandler(async (req, res) => {
   // find problem by slug
