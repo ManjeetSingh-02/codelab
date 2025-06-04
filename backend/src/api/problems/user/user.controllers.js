@@ -10,7 +10,7 @@ import { SubmissionStatusEnum } from "../../../utils/constants.js";
 // @controller GET /
 export const getAllProblems = asyncHandler(async (req, res) => {
   // get all problems from db
-  const allProblems = await Problem.find({}).select("title difficulty tags slug");
+  const allProblems = await Problem.find({}).select("title difficulty tags slug solvedBy");
 
   // success status to user
   return res
