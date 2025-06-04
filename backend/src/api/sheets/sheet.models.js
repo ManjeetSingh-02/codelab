@@ -2,7 +2,7 @@
 import mongoose, { Schema } from "mongoose";
 
 // import local modules
-import { AvailableSheetStatuses } from "../../utils/constants.js";
+import { AvailableSheetStatuses, SheetStatusEnum } from "../../utils/constants.js";
 
 // schema for sheet
 const sheetSchema = new Schema(
@@ -26,7 +26,7 @@ const sheetSchema = new Schema(
     status: {
       type: String,
       enum: AvailableSheetStatuses,
-      required: true,
+      default: SheetStatusEnum.PRIVATE,
     },
     problems: {
       type: [Schema.Types.ObjectId],
