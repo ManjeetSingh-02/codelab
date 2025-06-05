@@ -38,6 +38,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     email,
     fullname,
     password,
+    isEmailVerified: true,
   });
   if (!newUser)
     throw new APIError(500, "User Registration Error", [
@@ -45,19 +46,19 @@ export const registerUser = asyncHandler(async (req, res) => {
     ]);
 
   // generate email verification token and expiry and store in db
-  const { token, tokenExpiry } = newUser.generateTemporaryToken();
-  newUser.emailVerificationToken = token;
-  newUser.emailVerificationExpiry = tokenExpiry;
+  // const { token, tokenExpiry } = newUser.generateTemporaryToken();
+  // newUser.emailVerificationToken = token;
+  // newUser.emailVerificationExpiry = tokenExpiry;
 
   // update user in db
   await newUser.save();
 
   // send emailVerificationToken to user by email
-  await sendMail({
-    email: newUser.email,
-    subject: "Verify your account - CodeLab",
-    mailGenContent: verificationMailContentGenerator(newUser.username, token),
-  });
+  // await sendMail({
+  //   email: newUser.email,
+  //   subject: "Verify your account - CodeLab",
+  //   mailGenContent: verificationMailContentGenerator(newUser.username, token),
+  // });
 
   // success status to user
   return res.status(201).json(new APIResponse(201, "User registered successfully"));
@@ -418,11 +419,11 @@ export const updateUserCurrentPassword = asyncHandler(async (req, res) => {
   await existingUser.save();
 
   // send password change confirmation to user in email
-  await sendMail({
-    email: existingUser.email,
-    subject: "Password Change Confirmation - CodeLab",
-    mailGenContent: passwordChangeConfirmationMailContentGenerator(existingUser.username),
-  });
+  // await sendMail({
+  //   email: existingUser.email,
+  //   subject: "Password Change Confirmation - CodeLab",
+  //   mailGenContent: passwordChangeConfirmationMailContentGenerator(existingUser.username),
+  // });
 
   // success status to user
   return res.status(200).json(new APIResponse(200, "Password updated successfully"));

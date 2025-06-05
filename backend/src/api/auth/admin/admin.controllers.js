@@ -91,14 +91,14 @@ export const updateUserRole = asyncHandler(async (req, res) => {
   await existingUser.save();
 
   // send role updation confirmation to user in email
-  await sendMail({
-    email: existingUser.email,
-    subject: "Role Update Cofirmation - CodeLab",
-    mailGenContent: roleUpdateConfirmationMailContentGenerator(
-      existingUser.username,
-      existingUser.role,
-    ),
-  });
+  // await sendMail({
+  //   email: existingUser.email,
+  //   subject: "Role Update Cofirmation - CodeLab",
+  //   mailGenContent: roleUpdateConfirmationMailContentGenerator(
+  //     existingUser.username,
+  //     existingUser.role,
+  //   ),
+  // });
 
   // success status to user
   return res.status(200).json(
