@@ -22,3 +22,8 @@ export const createSheetSchema = z.object({
   title: sheetTitleSchema,
   description: sheetDescriptionSchema,
 });
+
+// zod schema for updateProblemIntoSheet
+export const updateProblemIntoSheetSchema = z.object({
+  problemSlug: z.string().trim().nonempty({ message: "Problem Slug is required" }),
+});

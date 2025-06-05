@@ -12,7 +12,7 @@ import {
   getOneSheet,
   removeProblemFromSheet,
 } from "./sheet.controllers.js";
-import { createSheetSchema } from "./sheet.zodschemas.js";
+import { createSheetSchema, updateProblemIntoSheetSchema } from "./sheet.zodschemas.js";
 
 // create a new router
 const router = Router();
@@ -34,7 +34,7 @@ router.patch(
   "/:sheetSlug/add-problem",
   isLoggedIn,
   isVerified,
-  validateSchema(),
+  validateSchema(updateProblemIntoSheetSchema),
   addProblemToSheet,
 );
 
@@ -43,7 +43,7 @@ router.patch(
   "/:sheetSlug/remove-problem",
   isLoggedIn,
   isVerified,
-  validateSchema(),
+  validateSchema(updateProblemIntoSheetSchema),
   removeProblemFromSheet,
 );
 

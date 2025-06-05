@@ -86,11 +86,6 @@ const userSchema = new Schema(
       ref: "Problem",
       default: [],
     },
-    sheets: {
-      type: [Schema.Types.ObjectId],
-      ref: "Sheet",
-      default: [],
-    },
   },
   { timestamps: true },
 );
