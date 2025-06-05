@@ -1,8 +1,8 @@
 // import local modules
-import { asyncHandler } from "../../utils/async-handler.js";
-import { APIError } from "../error.api.js";
+import { asyncHandler } from "../../../utils/async-handler.js";
+import { APIError } from "../../error.api.js";
 import { Problem } from "../problems/problem.models.js";
-import { APIResponse } from "../response.api.js";
+import { APIResponse } from "../../response.api.js";
 import { Submission } from "./submission.models.js";
 
 // @controller GET /

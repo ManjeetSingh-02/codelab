@@ -2,7 +2,10 @@
 import mongoose, { Schema } from "mongoose";
 
 // import local modules
-import { AvailableJudge0Languages, AvailableProblemDifficulties } from "../../utils/constants.js";
+import {
+  AvailableJudge0Languages,
+  AvailableProblemDifficulties,
+} from "../../../utils/constants.js";
 
 // schema for examples
 const exampleSchema = new Schema(

@@ -2,7 +2,10 @@
 import { z } from "zod";
 
 // import local modules
-import { AvailableJudge0Languages, AvailableProblemDifficulties } from "../../utils/constants.js";
+import {
+  AvailableJudge0Languages,
+  AvailableProblemDifficulties,
+} from "../../../utils/constants.js";
 
 // zod schema for problem title
 const problemTitleSchema = z

@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // import local modules
-import { isLoggedIn, isVerified, validateSchema } from "../../utils/route-protector.js";
+import { isLoggedIn, isVerified, validateSchema } from "../../../utils/route-protector.js";
 import {
   addProblemToSheet,
   createSheet,

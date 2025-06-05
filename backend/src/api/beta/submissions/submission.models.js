@@ -6,7 +6,7 @@ import {
   AvailableJudge0ErrorIdMessages,
   AvailableJudge0Languages,
   AvailableSubmissionStatuses,
-} from "../../utils/constants.js";
+} from "../../../utils/constants.js";
 
 // schema for testCaseResult
 const testCaseResultSchema = new Schema(

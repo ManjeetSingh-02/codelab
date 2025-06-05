@@ -3,22 +3,22 @@ import ms from "ms";
 import jwt from "jsonwebtoken";
 
 // import local modules
-import { envConfig } from "../../../utils/env.js";
-import { asyncHandler } from "../../../utils/async-handler.js";
+import { envConfig } from "../../../../utils/env.js";
+import { asyncHandler } from "../../../../utils/async-handler.js";
 import { User } from "./user.models.js";
-import { APIError } from "../../error.api.js";
-import { APIResponse } from "../../response.api.js";
-import { sendMail } from "../../../utils/mail/send.mail.js";
+import { APIError } from "../../../error.api.js";
+import { APIResponse } from "../../../response.api.js";
+import { sendMail } from "../../../../utils/mail/send.mail.js";
 import {
   accountDeletionConfirmationMailContentGenerator,
   forgotPasswordMailContentGenerator,
   passwordChangeConfirmationMailContentGenerator,
   verificationMailContentGenerator,
-} from "../../../utils/mail/genContent.mail.js";
+} from "../../../../utils/mail/genContent.mail.js";
 import {
   deleteImageFromCloudinary,
   uploadImageonCloudinary,
-} from "../../../utils/imageHandler/cloudinary.imageHandler.js";
+} from "../../../../utils/imageHandler/cloudinary.imageHandler.js";
 
 // @controller POST /register
 export const registerUser = asyncHandler(async (req, res) => {

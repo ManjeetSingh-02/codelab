@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // import local modules
-import { isLoggedIn, isVerified } from "../../utils/route-protector.js";
+import { isLoggedIn, isVerified } from "../../../utils/route-protector.js";
 import { getAllProblemSubmissions, getAllUserSubmissions } from "./submission.controllers.js";
 
 // create a new router

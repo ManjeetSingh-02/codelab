@@ -4,13 +4,13 @@ import { Router } from "express";
 // import local modules
 import { getAllRoles, getAllUsers, updateUserRole } from "./admin.controllers.js";
 import { getAllUsersSchema, updateUserRoleSchema } from "./admin.zodschemas.js";
-import { UserRolesEnum } from "../../../utils/constants.js";
+import { UserRolesEnum } from "../../../../utils/constants.js";
 import {
   hasRequiredRole,
   isLoggedIn,
   isVerified,
   validateSchema,
-} from "../../../utils/route-protector.js";
+} from "../../../../utils/route-protector.js";
 
 // create a new router
 const adminRouter = Router();

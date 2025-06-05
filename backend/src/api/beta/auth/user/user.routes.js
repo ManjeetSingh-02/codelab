@@ -25,8 +25,8 @@ import {
   updateUserCurrentPasswordSchema,
   updateUserDetailsSchema,
 } from "./user.zodschemas.js";
-import { isLoggedIn, isVerified, validateSchema } from "../../../utils/route-protector.js";
-import { uploadImageLocally } from "../../../utils/imageHandler/multer.imageHandler.js";
+import { isLoggedIn, isVerified, validateSchema } from "../../../../utils/route-protector.js";
+import { uploadImageLocally } from "../../../../utils/imageHandler/multer.imageHandler.js";
 
 // create a new router
 const userRouter = Router();

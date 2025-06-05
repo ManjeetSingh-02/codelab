@@ -22,14 +22,14 @@ import {
   isLoggedIn,
   isVerified,
   validateSchema,
-} from "../../utils/route-protector.js";
+} from "../../../utils/route-protector.js";
 import {
   createProblemSchema,
   updateProblemEditorialSchema,
   updateProblemInformationSchema,
   updateProblemTestCasesAndCodeInformationsSchema,
 } from "./problem.zodschemas.js";
-import { UserRolesEnum } from "../../utils/constants.js";
+import { UserRolesEnum } from "../../../utils/constants.js";
 import { executeCodeSchema } from "./execute-code.zodschemas.js";
 
 // create a new router

@@ -2,12 +2,12 @@
 import slugify from "slugify";
 
 // import local modules
-import { asyncHandler } from "../../../utils/async-handler.js";
-import { APIError } from "../../error.api.js";
-import { APIResponse } from "../../response.api.js";
+import { asyncHandler } from "../../../../utils/async-handler.js";
+import { APIError } from "../../../error.api.js";
+import { APIResponse } from "../../../response.api.js";
 import { Problem } from "../problem.models.js";
-import { Judge0LanguagesIdMap, Judge0ErrorIdMap, UserRolesEnum } from "../../../utils/constants.js";
-import { submitBatchAndGetTokens, pollBatchTokensAndGetResults } from "../../../utils/judge0.js";
+import { Judge0LanguagesIdMap, Judge0ErrorIdMap, UserRolesEnum } from "../../../../utils/constants.js";
+import { submitBatchAndGetTokens, pollBatchTokensAndGetResults } from "../../../../utils/judge0.js";
 import { Submission } from "../../submissions/submission.models.js";
 import { Sheet } from "../../sheets/sheet.models.js";
 

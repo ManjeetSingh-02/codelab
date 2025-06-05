@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 // import local modules
-import { AvailableUserStates, UserRolesEnum } from "../../../utils/constants.js";
+import { AvailableUserStates, UserRolesEnum } from "../../../../utils/constants.js";
 
 // zod schema for user type
 const userStateSchema = z.enum(AvailableUserStates);

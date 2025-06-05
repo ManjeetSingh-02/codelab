@@ -2,7 +2,7 @@
 import mongoose, { Schema } from "mongoose";
 
 // import local modules
-import { AvailableSheetStatuses, SheetStatusEnum } from "../../utils/constants.js";
+import { AvailableSheetStatuses, SheetStatusEnum } from "../../../utils/constants.js";
 
 // schema for sheet
 const sheetSchema = new Schema(

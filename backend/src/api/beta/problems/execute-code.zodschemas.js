@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 // import local modules
-import { AvailableJudge0Languages } from "../../utils/constants.js";
+import { AvailableJudge0Languages } from "../../../utils/constants.js";
 
 // zod schema for execute code
 export const executeCodeSchema = z.object({

@@ -1,11 +1,11 @@
 // import local modules
-import { asyncHandler } from "../../../utils/async-handler.js";
-import { APIError } from "../../error.api.js";
-import { APIResponse } from "../../response.api.js";
+import { asyncHandler } from "../../../../utils/async-handler.js";
+import { APIError } from "../../../error.api.js";
+import { APIResponse } from "../../../response.api.js";
 import { Problem } from "../problem.models.js";
 import { User } from "../../auth/user/user.models.js";
 import { Submission } from "../../submissions/submission.models.js";
-import { SubmissionStatusEnum } from "../../../utils/constants.js";
+import { SubmissionStatusEnum } from "../../../../utils/constants.js";
 
 // @controller GET /
 export const getAllProblems = asyncHandler(async (_, res) => {

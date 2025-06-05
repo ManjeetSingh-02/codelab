@@ -1,11 +1,11 @@
 // import local modules
-import { asyncHandler } from "../../../utils/async-handler.js";
+import { asyncHandler } from "../../../../utils/async-handler.js";
 import { User } from "../user/user.models.js";
-import { APIError } from "../../error.api.js";
-import { APIResponse } from "../../response.api.js";
-import { sendMail } from "../../../utils/mail/send.mail.js";
-import { roleUpdateConfirmationMailContentGenerator } from "../../../utils/mail/genContent.mail.js";
-import { UserRolesEnum, AvailableUserRoles } from "../../../utils/constants.js";
+import { APIError } from "../../../error.api.js";
+import { APIResponse } from "../../../response.api.js";
+import { sendMail } from "../../../../utils/mail/send.mail.js";
+import { roleUpdateConfirmationMailContentGenerator } from "../../../../utils/mail/genContent.mail.js";
+import { UserRolesEnum, AvailableUserRoles } from "../../../../utils/constants.js";
 
 // @sub-controllers for /get-all-users
 const userTypes = {

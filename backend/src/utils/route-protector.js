@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 import { envConfig } from "./env.js";
 import { APIError } from "../api/error.api.js";
 import { asyncHandler } from "./async-handler.js";
-import { User } from "../api/auth/user/user.models.js";
-import { Problem } from "../api/problems/problem.models.js";
+import { User } from "../api/beta/auth/user/user.models.js";
+import { Problem } from "../api/beta/problems/problem.models.js";
 import { Judge0LanguagesIdMap, Judge0ErrorIdMap, SubmissionStatusEnum } from "./constants.js";
 import { pollBatchTokensAndGetResults, submitBatchAndGetTokens } from "./judge0.js";
 
