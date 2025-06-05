@@ -8,6 +8,8 @@ import { APIResponse } from "../../response.api.js";
 import { Problem } from "../problem.models.js";
 import { Judge0LanguagesIdMap, Judge0ErrorIdMap, UserRolesEnum } from "../../../utils/constants.js";
 import { submitBatchAndGetTokens, pollBatchTokensAndGetResults } from "../../../utils/judge0.js";
+import { Submission } from "../../submissions/submission.models.js";
+import { Sheet } from "../../sheets/sheet.models.js";
 
 // @controller POST /
 export const createProblem = asyncHandler(async (req, res) => {
@@ -269,6 +271,20 @@ export const deleteProblem = asyncHandler(async (req, res) => {
       "Delete Problem Error",
       "Access Denied for not having required permissions",
     );
+
+  // delete all submissions related to this problem
+  await Submission.deleteMany({ problemId: existingProblem._id });
+
+  // delete this problem id entry from all sheets problems array
+  const existingSheets = await Sheet.find({ problems: existingProblem._id });
+
+  // loop through all sheets and remove problem id from problems array
+  for (const sheet of existingSheets) {
+    sheet.problems = sheet.problems.filter(
+      problemId => problemId.toString() !== existingProblem._id.toString(),
+    );
+    await sheet.save();
+  }
 
   // delete problem
   await existingProblem.deleteOne();
